@@ -1,6 +1,6 @@
 package tableTennisInstructor.service;
 
-import tableTennisInstructor.model.facts.Item;
+import tableTennisInstructor.model.drools.facts.Item;
 
 public interface ProbaService {
 

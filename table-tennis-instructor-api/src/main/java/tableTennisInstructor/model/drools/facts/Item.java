@@ -1,4 +1,4 @@
-package tableTennisInstructor.model.facts;
+package tableTennisInstructor.model.drools.facts;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,0 +1,53 @@
+//created on: May 2, 2020
+package integracija
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.facts.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+
+
+rule "BEGINER previous knowledge if none training for this skill is done"
+    when
+		$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	
+    	Number(intValue == 0) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je POCETNICKO jer nema nista u listi");
+    	$tfc.setPreviousKnowledge(Knowledge.BEGINER);
+    	update($tfc);
+end
+
+
+
+
+rule "Choose Beginer level if finished train on INTERMEDIATE and have BAD avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId, trainingMark == TrainingMark.BAD)
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.INTERMEDIATE
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je POCETNICKO");
+    	$tfc.setPreviousKnowledge(Knowledge.BEGINER);
+    	update($tfc);
+end
