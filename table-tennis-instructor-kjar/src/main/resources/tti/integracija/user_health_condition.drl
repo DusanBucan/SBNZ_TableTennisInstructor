@@ -7,6 +7,7 @@ import tableTennisInstructor.model.drools.facts.training.*;
 
 rule "Good Healht condition"
 	no-loop 
+	salience 100
     when
     	$trReq: TrainingChooseRequestFact($userId: userId, $userHealth: userHealth)
     	$tfc: TrainingChooseFact(userId == $userId) @Watch (userId)
@@ -19,6 +20,7 @@ end
 
 rule "Bad Healht condition"
 	no-loop 
+	salience 100
     when
     	$trReq: TrainingChooseRequestFact($userId: userId, $userHealth: userHealth)
     	$tfc: TrainingChooseFact(userId == $userId) @Watch (userId)
@@ -35,6 +37,7 @@ end
 
 
 rule "Average Health Condition"
+	salience 90
     when
     	$trReq: TrainingChooseRequestFact($userId: userId, $userHealth: userHealth)
     	$tfc: TrainingChooseFact(userId == $userId, userHealthState == UserHealthState.UNKNOWN) @Watch (userId)

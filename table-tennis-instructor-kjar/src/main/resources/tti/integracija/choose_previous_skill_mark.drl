@@ -22,7 +22,7 @@ rule "Set unknown previous skill mark if none training for this skill is dones"
     	 						result(count)
     	 					)
     then
-    	System.out.println("dobio je UNKNOWN prosecnu ocenu");
+    	System.out.println("dobio je UNKNOWN prosecnu ocenu za ovaj skill");
     	AverageMark avgMark = new AverageMark();
     	avgMark.setUserId($userId);
     	avgMark.setTrainingMark(TrainingMark.UNKNOWN);
@@ -57,7 +57,7 @@ rule "Set Bad previous skill mark if average skill mark is under 3"
     	 						result(total / count)
     	 					)
     then
-    	System.out.println("dobio je losu prosecnu ocenu");
+    	System.out.println("dobio je losu prosecnu ocenu za ovaj skill");
     	AverageMark avgMark = new AverageMark();
     	avgMark.setUserId($userId);
     	avgMark.setTrainingMark(TrainingMark.BAD);
@@ -93,7 +93,7 @@ rule "Set GOOD previous skill mark if average skill mark is between 3 and 4"
     	 						result(total / count)
     	 					)
     then
-    	System.out.println("dobio je GOOD prosecnu ocenu");
+    	System.out.println("dobio je GOOD prosecnu ocenu za ovaj skill ");
     	AverageMark avgMark = new AverageMark();
     	avgMark.setUserId($userId);
     	avgMark.setTrainingMark(TrainingMark.GOOD);
@@ -129,7 +129,7 @@ rule "Set EXCELLENT previous skill mark if average skill mark is between 3 and 4
     	 						result(total / count)
     	 					)
     then
-    	System.out.println("dobio je EXCELENT prosecnu ocenu");
+    	System.out.println("dobio je EXCELENT prosecnu ocenu za ovaj skill");
     	AverageMark avgMark = new AverageMark();
     	avgMark.setUserId($userId);
     	avgMark.setTrainingMark(TrainingMark.EXCELLENT);

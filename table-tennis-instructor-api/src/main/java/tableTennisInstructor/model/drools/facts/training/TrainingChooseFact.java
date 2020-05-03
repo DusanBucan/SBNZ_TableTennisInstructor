@@ -14,6 +14,8 @@ public class TrainingChooseFact {
 	public Knowledge similarKnowledge;
 	
 	public TrainingChooseFact() {
+		this.similarKnowledge = Knowledge.UNKNOWN;
+		this.previousKnowledge = Knowledge.UNKNOWN;
 		this.choosenLevel = TrainingLevel.UNKNOWN;
 		this.userHealthState = UserHealthState.UNKNOWN;
 	}

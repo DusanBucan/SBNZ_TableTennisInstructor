@@ -1,0 +1,38 @@
+//created on: May 3, 2020
+package integracija
+
+
+global ArrayList<Skill> skills;
+//list any import classes here.
+import tableTennisInstructor.model.drools.facts.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import tableTennisInstructor.model.drools.facts.skill.*;
+import java.util.ArrayList;
+
+rule "Find similar Skills to desiredSkill"
+	when
+		$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$similarSkills: ArrayList() from collect(
+    								Skill($desiredSkill.skillGroup == skillGroup,
+    									  skillId != $desiredSkill.skillId )
+    									from skills
+    								)
+	then
+		SimilarSkillFact $similarSkillFacts = new SimilarSkillFact();
+		$similarSkillFacts.setSkill($desiredSkill);
+		
+		for(Object s : $similarSkills){
+			$similarSkillFacts.addSimilarSkill((Skill)s);
+		}
+		insert($similarSkillFacts);
+end
+
+rule "List similar Skills to desiredSkill"
+	when
+		$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$similarSkills: SimilarSkillFact(skill.skillId == $desiredSkill.skillId)
+	then
+		for(Long s : $similarSkills.similarSkills){
+			System.out.println(s);
+		}
+end

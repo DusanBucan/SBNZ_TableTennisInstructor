@@ -7,8 +7,10 @@ import tableTennisInstructor.model.drools.facts.training.*;
 
 rule "Choose advanced trainig level when previous knowledge advanced and other conditions"
 	no-loop 
+	salience 90
     when
-        $tfc : TrainingChooseFact(userHealthState == UserHealthState.GOOD, 
+        $tfc : TrainingChooseFact(choosenLevel != TrainingLevel.BEGINNER,
+        						 userHealthState == UserHealthState.GOOD, 
         						 trainingDuradtion != TrainingDuration.SHORT,
         						 previousKnowledge == Knowledge.ADVANCED) @Watch (!userId)
     then
@@ -19,8 +21,10 @@ end
 
 rule "Choose advanced trainig level when similiar knowledge advanced and other conditions"
 	no-loop 
+	salience 90
     when
-        $tfc : TrainingChooseFact(userHealthState == UserHealthState.GOOD, 
+        $tfc : TrainingChooseFact(choosenLevel != TrainingLevel.BEGINNER,
+        						 userHealthState == UserHealthState.GOOD, 
         						 trainingDuradtion != TrainingDuration.SHORT,
         						 similarKnowledge == Knowledge.ADVANCED) @Watch (!userId)
     then
@@ -32,6 +36,7 @@ end
 
 rule "Choose beginer trainig level"
 	no-loop 
+	salience 100
     when
         $tfc : TrainingChooseFact(userHealthState == UserHealthState.BAD || 
         						 previousKnowledge == Knowledge.BEGINER ||
@@ -44,6 +49,7 @@ end
 
 rule "Choose intermediate training level"
 	no-loop 
+	salience 80
     when
         $tfc : TrainingChooseFact(choosenLevel == TrainingLevel.UNKNOWN,
         						 userHealthState != UserHealthState.UNKNOWN);
@@ -52,4 +58,3 @@ rule "Choose intermediate training level"
     	$tfc.setChoosenLevel(TrainingLevel.INTERMEDIATE);
         update( $tfc );
 end
-

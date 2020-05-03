@@ -6,6 +6,7 @@ import tableTennisInstructor.model.drools.facts.*;
 import tableTennisInstructor.model.drools.facts.training.*;
 
 
+
 rule "BEGINER previous knowledge if none training for this skill is done"
     when
 		$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
@@ -196,4 +197,3 @@ rule "Choose ADVANCED level if finished train on ADVANCED and have EXCELLENT or 
     	$tfc.setPreviousKnowledge(Knowledge.ADVANCED);
     	update($tfc);
 end
-

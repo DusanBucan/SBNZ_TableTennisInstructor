@@ -6,9 +6,10 @@ public class Skill {
 	public String name;
 	public String execution_description;
 	public SkillLevel skillLevel;
-	
+	public int skillGroup;
+
 	public Skill() {}
-	
+
 	public Long getSkillId() {
 		return skillId;
 	}
@@ -32,6 +33,14 @@ public class Skill {
 	}
 	public void setSkillLevel(SkillLevel skillLevel) {
 		this.skillLevel = skillLevel;
+	}
+
+	public int getSkillGroup() {
+		return skillGroup;
+	}
+
+	public void setSkillGroup(int skillGroup) {
+		this.skillGroup = skillGroup;
 	}
 	
 	
