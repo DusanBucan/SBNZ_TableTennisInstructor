@@ -1,45 +1,46 @@
 package tableTennisInstructor.service.impl;
 
-import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.ObjectFilter;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import tableTennisInstructor.model.drools.facts.Item;
 import tableTennisInstructor.model.drools.facts.UserHealth;
 import tableTennisInstructor.model.drools.facts.UserHealthState;
 import tableTennisInstructor.model.drools.facts.skill.Skill;
 import tableTennisInstructor.model.drools.facts.skill.SkillLevel;
 import tableTennisInstructor.model.drools.facts.training.*;
-import tableTennisInstructor.service.ProbaService;
+import tableTennisInstructor.service.KieSessionService;
+import tableTennisInstructor.service.TrainingPlanService;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class ProbaServiceImpl implements ProbaService {
+public class TrainingPlanServiceImpl implements TrainingPlanService {
 
     @Autowired
-    private KieContainer kieContainer;
-
-    @Value("${training.plan.kie.session.name}")
-    public String sessionName;
-
-    @Value("${cep.kie.session.name}")
-    public String cepKieSession;
+    private KieSessionService kieSessionService;
 
     @Override
-    public Item getClassifiedItem(Item i) {
-
-//        KieSession kieSession = kieContainer.newKieSession(cepKieSession);
-        KieSession kieSession = kieContainer.newKieSession(sessionName);
-        TrainingChooseRequestFact tcReq = prepareReq(kieSession);
+    public TrainingChooseFact findTrainingPlan() {
+        TrainingChooseRequestFact tcReq = new TrainingChooseRequestFact();
+        ArrayList<Skill> allSkills = prepareReq(tcReq);
+        KieSession kieSession =  kieSessionService.getKieSessionForTrainingPlan(allSkills);
         kieSession.insert(tcReq);
+
         kieSession.fireAllRules();
         kieSession.dispose();
+
+        TrainingChooseFact tfc =this.processKjarResults(kieSession);
+        return tfc;
+
+    }
+
+    @Override
+    public TrainingChooseFact processKjarResults(KieSession kieSession) {
 
         // Find all PayStylePass facts and 1st generation child classes of PayStylePass.
         ObjectFilter payPassFilter = new ObjectFilter() {
@@ -51,25 +52,19 @@ public class ProbaServiceImpl implements ProbaService {
             }
         };
 
-        // printFactsMessage(kieSession);
-
         List<TrainingChooseFact> facts = new ArrayList<>();
         for (FactHandle handle : kieSession.getFactHandles(payPassFilter)) {
             facts.add((TrainingChooseFact) kieSession.getObject(handle));
         }
         if (facts.size() == 0) {
-            System.out.println("nemaaaa");
+            System.out.println("No Kjar Results");
         }
-        // Assumes that the rules will always be generating a single pay pass.
         TrainingChooseFact tfc =  facts.get(0);
-        System.out.println(tfc.getChoosenLevel());
-
-
-        return i;
+        return tfc;
     }
 
 
-    public TrainingChooseRequestFact prepareReq(KieSession kSession) {
+    public ArrayList<Skill> prepareReq(TrainingChooseRequestFact tcReq) {
 
         UserHealth uh = new UserHealth(null, new Date(),
                 65, 124, 72, UserHealthState.UNKNOWN);
@@ -133,7 +128,6 @@ public class ProbaServiceImpl implements ProbaService {
         trainHistory.add(trainingExecution3);
         trainHistory.add(trainingExecution4);
 
-        TrainingChooseRequestFact tcReq = new TrainingChooseRequestFact();
         tcReq.setUserId(1l);
         tcReq.setDesiredSkill(skill);
         tcReq.setUserHealth(uh);
@@ -146,9 +140,6 @@ public class ProbaServiceImpl implements ProbaService {
         allSkills.add(skill2);
         allSkills.add(skill4);
 
-
-        kSession.setGlobal("skills", allSkills);
-
-        return tcReq;
+        return allSkills;
     }
 }

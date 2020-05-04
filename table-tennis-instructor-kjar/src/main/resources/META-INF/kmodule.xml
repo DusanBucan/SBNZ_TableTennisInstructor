@@ -7,7 +7,7 @@
     </kbase>
     
     
-    <kbase name="cepTrainingMonitorKb" packages="tti.cepTrainingMonitor">
+    <kbase name="cepTrainingMonitorKb" eventProcessingMode="stream" packages="tti.cepTrainingMonitor">
         <ksession name="cepTrainingMonitor"/>
     </kbase>
     
