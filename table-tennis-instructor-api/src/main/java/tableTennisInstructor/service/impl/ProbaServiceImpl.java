@@ -5,6 +5,7 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.ObjectFilter;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tableTennisInstructor.model.drools.facts.Item;
 import tableTennisInstructor.model.drools.facts.UserHealth;
@@ -24,12 +25,17 @@ public class ProbaServiceImpl implements ProbaService {
     @Autowired
     private KieContainer kieContainer;
 
+    @Value("${training.plan.kie.session.name}")
+    public String sessionName;
+
+    @Value("${cep.kie.session.name}")
+    public String cepKieSession;
+
     @Override
     public Item getClassifiedItem(Item i) {
 
-
-
-        KieSession kieSession = kieContainer.newKieSession();
+//        KieSession kieSession = kieContainer.newKieSession(cepKieSession);
+        KieSession kieSession = kieContainer.newKieSession(sessionName);
         TrainingChooseRequestFact tcReq = prepareReq(kieSession);
         kieSession.insert(tcReq);
         kieSession.fireAllRules();

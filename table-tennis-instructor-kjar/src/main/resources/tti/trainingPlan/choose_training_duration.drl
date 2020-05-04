@@ -1,5 +1,5 @@
 //created on: May 2, 2020
-package integracija
+package trainingPlan
 
 import tableTennisInstructor.model.drools.facts.*;
 import tableTennisInstructor.model.drools.facts.training.*;
