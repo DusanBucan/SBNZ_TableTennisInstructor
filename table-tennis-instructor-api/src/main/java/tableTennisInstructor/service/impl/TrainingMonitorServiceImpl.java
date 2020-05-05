@@ -8,6 +8,7 @@ import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tableTennisInstructor.model.drools.events.BadRacketAngleEvent;
+import tableTennisInstructor.model.drools.events.EndTrainingEvent;
 import tableTennisInstructor.model.drools.events.SkillExecutionEvent;
 import tableTennisInstructor.model.drools.facts.training.Training;
 import tableTennisInstructor.model.drools.facts.training.TrainingChooseFact;
@@ -76,6 +77,12 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
 //            System.out.println(facts);
 
         }
+        kieSession.insert(new EndTrainingEvent());
+        clock.advanceTime(1, TimeUnit.SECONDS);
+        int ruleCount = kieSession.fireAllRules();
+        System.out.println("broj pravila " + ruleCount );
+
+        System.out.println(trainingExecution.getTrainingMark());
         //We manually advance time 1 minute, without a heart beat
 //        clock.advanceTime(1, TimeUnit.MINUTES);
 //        int ruleCount = ksession.fireAllRules();
@@ -117,7 +124,7 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
         SkillExecutionEvent sk6 = new SkillExecutionEvent(6, true, true,
                 0.0, 10.0, trainingExecution.getId() );
         retVal.add(sk6);
-        SkillExecutionEvent sk7 = new SkillExecutionEvent(7, true, false,
+        SkillExecutionEvent sk7 = new SkillExecutionEvent(7, false, false,
                 0.0, 10.0, trainingExecution.getId() );
         retVal.add(sk7);
         SkillExecutionEvent sk8 = new SkillExecutionEvent(8, false, false,
@@ -126,7 +133,7 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
         SkillExecutionEvent sk9 = new SkillExecutionEvent(9, false, false,
                 0.0, -15.0, trainingExecution.getId() );
         retVal.add(sk9);
-        SkillExecutionEvent sk10 = new SkillExecutionEvent(10, false, true,
+        SkillExecutionEvent sk10 = new SkillExecutionEvent(10, true, true,
                 0.0, 10.0, trainingExecution.getId() );
         retVal.add(sk10);
 

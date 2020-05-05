@@ -1,0 +1,138 @@
+//created on: May 5, 2020
+package cepTrainingMonitor
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.events.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import java.util.ArrayList;
+import java.lang.Long;
+
+
+rule "Create EXCELLENT mark when training is over and there are less then 6 SkillCorrectionEvent and there is no toMuchMiss for BEGINER Training"
+	salience 100
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+       	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
+       	$cntCorrectSkill: Number(intValue < 6) from accumulate(
+	       						$e: SkillCorrectionEvent(),
+	       						init(int total = 0;),
+	       						action( total += 1;),
+	       						result(total)
+       	) 
+       	not ToMuchMiss()
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.EXCELLENT);}
+    	System.out.println("Odlicna ocena za pocetnicki nivo");
+end
+
+rule "Create BAD mark when training is over and there are more then 7 SkillCorrectionEvent BEGINER Training"
+	salience 100
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+       	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
+       	$cntCorrectSkill: Number(intValue > 7) from accumulate(
+	       						$e: SkillCorrectionEvent(),
+	       						init(int total = 0;),
+	       						action( total += 1;),
+	       						result(total))
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
+    	System.out.println("BAD ocena za pocetnicki nivo previse ispravki tehnike");
+end
+
+rule "Create BAD mark when training is over and there is toMuchMiss"
+	salience 120
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+    	$tre: TrainingExecution()
+       	$tms: ToMuchMiss()
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
+    	System.out.println("BAD ocena previse promasaja");
+end
+
+// GOOD OCENA ZA SVE NIVOE
+// desice se ako se ne desi ni jedno drugo pravilo
+rule "Create GOOD mark when training is over and there is no markSet for Training"
+	salience 90
+    when
+    	$tre: TrainingExecution()
+    	$endTr: CreateMarkEvent(processed == false)
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.GOOD);}
+    	System.out.println("GOOD ocena ");
+end
+
+// ocene za INTERMEDIATE NIVO
+rule "Create EXCELLENT mark when training is over and there are less then 4 SkillCorrectionEvent and there is no toMuchMiss for INTERMEDIATE Training"
+	salience 100
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+       	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
+       	$cntCorrectSkill: Number(intValue < 4) from accumulate(
+	       						$e: SkillCorrectionEvent(),
+	       						init(int total = 0;),
+	       						action( total += 1;),
+	       						result(total)
+       	) 
+       	not ToMuchMiss()
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.EXCELLENT);}
+    	System.out.println("Odlicna ocena za INTERMEDIATE nivo");
+end
+
+rule "Create BAD mark when training is over and there are more then 5 SkillCorrectionEvent INTERMEDIATE Training"
+	salience 100
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+       	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
+       	$cntCorrectSkill: Number(intValue > 6) from accumulate(
+	       						$e: SkillCorrectionEvent(),
+	       						init(int total = 0;),
+	       						action( total += 1;),
+	       						result(total))
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
+    	System.out.println("BAD ocena za INTERMEDIATE nivo previse ispravki tehnike");
+end
+
+// ocene za ADVANCED NIVO
+rule "Create EXCELLENT mark when training is over and there are less then 1 SkillCorrectionEvent and there is no toMuchMiss for ADVANCED Training"
+	salience 100
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+       	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
+       	$cntCorrectSkill: Number(intValue < 1) from accumulate(
+	       						$e: SkillCorrectionEvent(),
+	       						init(int total = 0;),
+	       						action( total += 1;),
+	       						result(total)
+       	) 
+       	not ToMuchMiss()
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.EXCELLENT);}
+    	System.out.println("Odlicna ocena za ADVANCED nivo");
+end
+
+rule "Create BAD mark when training is over and there are more then 3 SkillCorrectionEvent ADVANCED Training"
+	salience 100
+    when
+    	$endTr: CreateMarkEvent(processed == false)
+       	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
+       	$cntCorrectSkill: Number(intValue > 3) from accumulate(
+	       						$e: SkillCorrectionEvent(),
+	       						init(int total = 0;),
+	       						action( total += 1;),
+	       						result(total))
+    then
+    	modify ($endTr) {setProcessed(true);}
+    	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
+    	System.out.println("BAD ocena za ADVANCED nivo previse ispravki tehnike");
+end
