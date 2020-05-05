@@ -1,5 +1,6 @@
 package tableTennisInstructor.model.drools.events;
 
+import org.drools.core.factmodel.traits.Traitable;
 import org.kie.api.definition.type.Role;
 
 import java.io.Serializable;
@@ -13,16 +14,28 @@ public class SkillExecutionEvent implements Serializable {
     public Double deltaSpeed;
     public Double deltaAngle;
     public Long trainingExecutionId;
+    public Boolean processed = false;
+    public int id;
+
+
+    // for rules helper atributes
+    public Boolean toMuchSuccesiveMissProcessed = false;
+    public Boolean badBodyPositionProcessed = false;
+
 
     public SkillExecutionEvent() {
+        this.processed = false;
     }
 
-    public SkillExecutionEvent(Boolean result, Boolean rightBodyMovement, Double deltaSpeed, Double deltaAngle, Long trainingExecutionId) {
+    public SkillExecutionEvent(int id, Boolean result, Boolean rightBodyMovement,
+                               Double deltaSpeed, Double deltaAngle, Long trainingExecutionId) {
         this.result = result;
         this.rightBodyMovement = rightBodyMovement;
         this.deltaSpeed = deltaSpeed;
         this.deltaAngle = deltaAngle;
         this.trainingExecutionId = trainingExecutionId;
+        this.processed = false;
+        this.id = id;
     }
 
     public void setResult(Boolean result) {
@@ -67,5 +80,37 @@ public class SkillExecutionEvent implements Serializable {
 
     public Long getTrainingExecutionId() {
         return trainingExecutionId;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setToMuchSuccesiveMissProcessed(Boolean toMuchSuccesiveMissProcessed) {
+        this.toMuchSuccesiveMissProcessed = toMuchSuccesiveMissProcessed;
+    }
+
+    public void setBadBodyPositionProcessed(Boolean badBodyPositionProcessed) {
+        this.badBodyPositionProcessed = badBodyPositionProcessed;
+    }
+
+    public Boolean getToMuchSuccesiveMissProcessed() {
+        return toMuchSuccesiveMissProcessed;
+    }
+
+    public Boolean getBadBodyPositionProcessed() {
+        return badBodyPositionProcessed;
     }
 }

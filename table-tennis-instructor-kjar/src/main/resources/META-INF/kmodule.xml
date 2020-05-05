@@ -8,7 +8,7 @@
     
     
     <kbase name="cepTrainingMonitorKb" eventProcessingMode="stream" packages="tti.cepTrainingMonitor">
-        <ksession name="cepTrainingMonitor"/>
+        <ksession name="cepTrainingMonitor" clockType="pseudo"/>
     </kbase>
     
     

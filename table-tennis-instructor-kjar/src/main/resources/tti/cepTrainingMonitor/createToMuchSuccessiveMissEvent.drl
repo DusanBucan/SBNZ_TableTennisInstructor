@@ -1,0 +1,71 @@
+//created on: May 4, 2020
+package cepTrainingMonitor
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.events.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import java.util.ArrayList;
+import java.lang.Long;
+
+//declare any global variables here
+
+
+rule "Create event toMuchSuccessiveMiss if training level is BEGINER and there are 5 successive miss"
+    when
+    	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
+    	$lastFiveShots: List(size >= 5) from
+        	accumulate($t: 
+        				SkillExecutionEvent(trainingExecutionId == $tre.id, 
+        									result == false,
+        									toMuchSuccesiveMissProcessed == false
+        									)
+        			   over window:time(6s)
+        			  ,collectList($t)) 
+    then
+    	for( Object $e: $lastFiveShots) {
+    		((SkillExecutionEvent)$e).setToMuchSuccesiveMissProcessed(true);
+    		update($e);
+    	}
+    	insert(new ToMuchSuccessiveMiss());
+    	System.out.println("Previse uzastopnih promasaja za pocetnicki nivo");
+end
+
+rule "Create event toMuchSuccessiveMiss if training level is INTERMEDIATE and there are 3 successive miss"
+    when
+    	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
+    	$lastFiveShots: List(size >= 3) from
+        	accumulate($t: 
+        				SkillExecutionEvent(trainingExecutionId == $tre.id, 
+        									result == false,
+        									toMuchSuccesiveMissProcessed == false
+        									)
+        			   over window:time(4s)
+        			  ,collectList($t)) 
+    then
+    	for( Object $e: $lastFiveShots) {
+    		((SkillExecutionEvent)$e).setToMuchSuccesiveMissProcessed(true);
+    		update($e);
+    	}
+    	insert(new ToMuchSuccessiveMiss());
+    	System.out.println("Previse uzastopnih promasaja za INTERMEDIATE nivo");
+end
+
+rule "Create event toMuchSuccessiveMiss if training level is ADVANCED and there are 2 successive miss"
+    when
+    	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
+    	$lastFiveShots: List(size >= 2) from
+        	accumulate($t: 
+        				SkillExecutionEvent(trainingExecutionId == $tre.id, 
+        									result == false,
+        									toMuchSuccesiveMissProcessed == false
+        									)
+        			   over window:time(3s)
+        			  ,collectList($t)) 
+    then
+    	for( Object $e: $lastFiveShots) {
+    		((SkillExecutionEvent)$e).setToMuchSuccesiveMissProcessed(true);
+    		update($e);
+    	}
+    	insert(new ToMuchSuccessiveMiss());
+    	System.out.println("Previse uzastopnih promasaja za ADVANCED nivo");
+end
