@@ -29,13 +29,68 @@ rule "Create Skill Correction Event when toMuchSuccessiveMissEvent is present"
 		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja");
 end
 
-rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and BadBodyPositionEvent are present"
-	salience 100
+
+rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketAngleCorrection are present"
+	salience 120
     when
     	$tre: TrainingExecution()
         $t: List(size == 1) from
         			 accumulate( 
-        					$ta: ToMuchSuccessiveMiss(processed == false) over window:length(1),
+        					$ta: ToMuchSuccessiveMiss(processed == false) over window:time(3s),
+        					collectList($ta)
+        			)
+        $bbE: List(size == 1) from
+        			 accumulate( 
+        					$ta: RacketAngleCorrectionEvent(processed == false) over window:time(6s),
+        					collectList($ta)
+        			) 
+    then
+    	insert(new SkillCorrectionEvent());
+    	ToMuchSuccessiveMiss $t1 = (ToMuchSuccessiveMiss) $t.get(0);
+    	$t1.setProcessed(true);
+		update($t1);
+		
+		RacketAngleCorrectionEvent $bbE1 = (RacketAngleCorrectionEvent) $bbE.get(0);
+    	$bbE1.setProcessed(true);
+		update($bbE1);
+		
+		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i los ugao reketa");
+end
+
+rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketSpeedCorrectionEvent are present"
+	salience 120
+    when
+    	$tre: TrainingExecution()
+        $t: List(size == 1) from
+        			 accumulate( 
+        					$ta: ToMuchSuccessiveMiss(processed == false) over window:time(3s),
+        					collectList($ta)
+        			)
+        $bbE: List(size == 1) from
+        			 accumulate( 
+        					$ta: RacketSpeedCorrectionEvent(processed == false) over window:time(6s),
+        					collectList($ta)
+        			) 
+    then
+    	insert(new SkillCorrectionEvent());
+    	ToMuchSuccessiveMiss $t1 = (ToMuchSuccessiveMiss) $t.get(0);
+    	$t1.setProcessed(true);
+		update($t1);
+		
+		RacketSpeedCorrectionEvent $bbE1 = (RacketSpeedCorrectionEvent) $bbE.get(0);
+    	$bbE1.setProcessed(true);
+		update($bbE1);
+		
+		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i losa brzina reketa");
+end
+
+rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and BadBodyPositionEvent are present"
+	salience 110
+    when
+    	$tre: TrainingExecution()
+        $t: List(size == 1) from
+        			 accumulate( 
+        					$ta: ToMuchSuccessiveMiss(processed == false) over window:time(3s),
         					collectList($ta)
         			)
         $bbE: List(size == 1) from
@@ -55,5 +110,90 @@ rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and BadBodyPo
 		
 		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i los je polozaj tela");
 end
+
+
+rule "Create Skill Correction Event when RacketAngleCorrection and BadBodyPositionEvent are present"
+	salience 100
+    when
+    	$tre: TrainingExecution()
+        $t: List(size == 1) from
+        			 accumulate( 
+        					$ta: RacketAngleCorrectionEvent(processed == false) over window:time(3s),
+        					collectList($ta)
+        			)
+        $bbE: List(size == 1) from
+        			 accumulate( 
+        					$ta: BadBodyPositionEvent(processed == false) over window:time(6s),
+        					collectList($ta)
+        			) 
+    then
+    	insert(new SkillCorrectionEvent());
+    	RacketAngleCorrectionEvent $t1 = (RacketAngleCorrectionEvent) $t.get(0);
+    	$t1.setProcessed(true);
+		update($t1);
+		
+		BadBodyPositionEvent $bbE1 = (BadBodyPositionEvent) $bbE.get(0);
+    	$bbE1.setProcessed(true);
+		update($bbE1);
+		
+		System.out.println("potrebna korekcija jer je LosUgaoReketa i LosPolozajTela");
+end
+
+rule "Create Skill Correction Event when RacketSpeedCorrection and BadBodyPositionEvent are present"
+	salience 100
+    when
+    	$tre: TrainingExecution()
+        $t: List(size == 1) from
+        			 accumulate( 
+        					$ta: RacketSpeedCorrectionEvent(processed == false) over window:time(3s),
+        					collectList($ta)
+        			)
+        $bbE: List(size == 1) from
+        			 accumulate( 
+        					$ta: BadBodyPositionEvent(processed == false) over window:time(6s),
+        					collectList($ta)
+        			) 
+    then
+    	insert(new SkillCorrectionEvent());
+    	RacketSpeedCorrectionEvent $t1 = (RacketSpeedCorrectionEvent) $t.get(0);
+    	$t1.setProcessed(true);
+		update($t1);
+		
+		BadBodyPositionEvent $bbE1 = (BadBodyPositionEvent) $bbE.get(0);
+    	$bbE1.setProcessed(true);
+		update($bbE1);
+		
+		System.out.println("potrebna korekcija jer je LosaBrzinaReketa i LosPolozajTela");
+end
+
+//TODO: ova pravila isto da li ce da prave BUG- kao kod brzina...
+
+rule "Create Skill Correction Event when RacketSpeedCorrection and RacketAngleCorrection are present"
+	salience 110
+    when
+    	$tre: TrainingExecution()
+        $t: List(size == 1) from
+        			 accumulate( 
+        					$ta: RacketSpeedCorrectionEvent(processed == false) over window:time(3s),
+        					collectList($ta)
+        			)
+        $bbE: List(size == 1) from
+        			 accumulate( 
+        					$ta: RacketAngleCorrectionEvent(processed == false) over window:time(3s),
+        					collectList($ta)
+        			) 
+    then
+    	insert(new SkillCorrectionEvent());
+    	RacketSpeedCorrectionEvent $t1 = (RacketSpeedCorrectionEvent) $t.get(0);
+    	$t1.setProcessed(true);
+		update($t1);
+		
+		RacketAngleCorrectionEvent $bbE1 = (RacketAngleCorrectionEvent) $bbE.get(0);
+    	$bbE1.setProcessed(true);
+		update($bbE1);
+		
+		System.out.println("potrebna korekcija jer je LosaBrzinaReketa i LosUgaoReketa");
+end
+
 
 

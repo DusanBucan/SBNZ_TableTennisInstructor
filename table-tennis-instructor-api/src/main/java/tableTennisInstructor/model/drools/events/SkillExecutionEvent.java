@@ -21,6 +21,7 @@ public class SkillExecutionEvent implements Serializable {
     public Boolean toMuchSuccesiveMissProcessed = false;
     public Boolean badBodyPositionProcessed = false;
     public Boolean badRacketAngleProcessed = false;
+    public Boolean badRacketSpeedProcessed = false;
 
 
     public SkillExecutionEvent() {
@@ -110,6 +111,14 @@ public class SkillExecutionEvent implements Serializable {
 
     public void setBadRacketAngleProcessed(Boolean badRacketAngleProcessed) {
         this.badRacketAngleProcessed = badRacketAngleProcessed;
+    }
+
+    public Boolean getBadRacketSpeedProcessed() {
+        return badRacketSpeedProcessed;
+    }
+
+    public void setBadRacketSpeedProcessed(Boolean badRacketSpeedProcessed) {
+        this.badRacketSpeedProcessed = badRacketSpeedProcessed;
     }
 }
 

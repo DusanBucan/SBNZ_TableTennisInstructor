@@ -1,19 +1,16 @@
 package tableTennisInstructor.model.drools.events;
 
-import org.kie.api.definition.type.PropertyReactive;
 import org.kie.api.definition.type.Role;
 
 import java.io.Serializable;
 
 @org.kie.api.definition.type.Role(Role.Type.EVENT)
-@PropertyReactive
-public class BadRacketAngleEvent implements Serializable {
-
+public class BadRacketSpeedEvent  implements Serializable {
 
     public Boolean processed = false;
-    public Double angle;
+    public Double speed;
 
-    public  BadRacketAngleEvent(){
+    public BadRacketSpeedEvent(){
         this.processed = false;
     }
 
@@ -21,15 +18,15 @@ public class BadRacketAngleEvent implements Serializable {
         this.processed = processed;
     }
 
-    public void setAngle(Double angle) {
-        this.angle = angle;
+    public void setSpeed(Double speed) {
+        this.speed = speed;
     }
 
     public Boolean getProcessed() {
         return processed;
     }
 
-    public Double getAngle() {
-        return angle;
+    public Double getSpeed() {
+        return speed;
     }
 }
