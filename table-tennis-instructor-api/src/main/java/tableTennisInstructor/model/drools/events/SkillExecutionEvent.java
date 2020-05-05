@@ -14,17 +14,16 @@ public class SkillExecutionEvent implements Serializable {
     public Double deltaSpeed;
     public Double deltaAngle;
     public Long trainingExecutionId;
-    public Boolean processed = false;
     public int id;
 
 
     // for rules helper atributes
     public Boolean toMuchSuccesiveMissProcessed = false;
     public Boolean badBodyPositionProcessed = false;
+    public Boolean badRacketAngleProcessed = false;
 
 
     public SkillExecutionEvent() {
-        this.processed = false;
     }
 
     public SkillExecutionEvent(int id, Boolean result, Boolean rightBodyMovement,
@@ -34,7 +33,6 @@ public class SkillExecutionEvent implements Serializable {
         this.deltaSpeed = deltaSpeed;
         this.deltaAngle = deltaAngle;
         this.trainingExecutionId = trainingExecutionId;
-        this.processed = false;
         this.id = id;
     }
 
@@ -82,14 +80,6 @@ public class SkillExecutionEvent implements Serializable {
         return trainingExecutionId;
     }
 
-    public Boolean getProcessed() {
-        return processed;
-    }
-
-    public void setProcessed(Boolean processed) {
-        this.processed = processed;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -113,4 +103,13 @@ public class SkillExecutionEvent implements Serializable {
     public Boolean getBadBodyPositionProcessed() {
         return badBodyPositionProcessed;
     }
+
+    public Boolean getBadRacketAngleProcessed() {
+        return badRacketAngleProcessed;
+    }
+
+    public void setBadRacketAngleProcessed(Boolean badRacketAngleProcessed) {
+        this.badRacketAngleProcessed = badRacketAngleProcessed;
+    }
 }
+

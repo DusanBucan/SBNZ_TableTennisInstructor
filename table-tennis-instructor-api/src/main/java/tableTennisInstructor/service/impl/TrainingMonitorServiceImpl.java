@@ -36,7 +36,7 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
 
         ArrayList<SkillExecutionEvent> shots = this.generateSkillExec();
         Training tr = new Training();
-        tr.setTrainingLevel(TrainingLevel.ADVANCED);
+        tr.setTrainingLevel(TrainingLevel.BEGINNER);
 
         TrainingExecution trainingExecution = new TrainingExecution();
         trainingExecution.setId(1l);
@@ -75,33 +75,33 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
         trainingExecution.setTraining(tr);
 
 
-        SkillExecutionEvent sk1 = new SkillExecutionEvent(1, false, false,
-                14.0, 10.0, trainingExecution.getId() );
+        SkillExecutionEvent sk1 = new SkillExecutionEvent(1, true, true,
+                14.0, 15.0, trainingExecution.getId() );
         retVal.add(sk1);
-        SkillExecutionEvent sk2 = new SkillExecutionEvent(2, false, false,
-                14.0, 10.0, trainingExecution.getId() );
+        SkillExecutionEvent sk2 = new SkillExecutionEvent(2, true, true,
+                14.0, 15.0, trainingExecution.getId() );
         retVal.add(sk2);
 
-        SkillExecutionEvent sk3 = new SkillExecutionEvent(3, false, true,
+        SkillExecutionEvent sk3 = new SkillExecutionEvent(3, true, true,
                 14.0, 10.0, trainingExecution.getId() );
         retVal.add(sk3);
-        SkillExecutionEvent sk4 = new SkillExecutionEvent(4, false, true,
+        SkillExecutionEvent sk4 = new SkillExecutionEvent(4, true, true,
                 14.0, 10.0, trainingExecution.getId() );
         retVal.add(sk4);
-        SkillExecutionEvent sk5 = new SkillExecutionEvent(5, false, true,
+        SkillExecutionEvent sk5 = new SkillExecutionEvent(5, true, true,
                 14.0, 10.0, trainingExecution.getId() );
         retVal.add(sk5);
-        SkillExecutionEvent sk6 = new SkillExecutionEvent(6, false, true,
+        SkillExecutionEvent sk6 = new SkillExecutionEvent(6, true, true,
                 14.0, 10.0, trainingExecution.getId() );
         retVal.add(sk6);
         SkillExecutionEvent sk7 = new SkillExecutionEvent(7, true, false,
                 14.0, 10.0, trainingExecution.getId() );
         retVal.add(sk7);
         SkillExecutionEvent sk8 = new SkillExecutionEvent(8, false, false,
-                14.0, 10.0, trainingExecution.getId() );
+                14.0, 15.0, trainingExecution.getId() );
         retVal.add(sk8);
         SkillExecutionEvent sk9 = new SkillExecutionEvent(9, false, false,
-                14.0, 10.0, trainingExecution.getId() );
+                14.0, -15.0, trainingExecution.getId() );
         retVal.add(sk9);
         SkillExecutionEvent sk10 = new SkillExecutionEvent(10, false, true,
                 14.0, 10.0, trainingExecution.getId() );
