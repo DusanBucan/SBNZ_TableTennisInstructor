@@ -10,6 +10,7 @@ rule "Choose advanced trainig level when previous knowledge advanced and other c
 	salience 90
     when
         $tfc : TrainingChooseFact(choosenLevel != TrainingLevel.BEGINNER,
+        						  choosenLevel != TrainingLevel.ADVANCED,
         						 userHealthState == UserHealthState.GOOD, 
         						 trainingDuradtion != TrainingDuration.SHORT,
         						 previousKnowledge == Knowledge.ADVANCED) @Watch (!userId)
@@ -24,6 +25,7 @@ rule "Choose advanced trainig level when similiar knowledge advanced and other c
 	salience 90
     when
         $tfc : TrainingChooseFact(choosenLevel != TrainingLevel.BEGINNER,
+        						 choosenLevel != TrainingLevel.ADVANCED,
         						 userHealthState == UserHealthState.GOOD, 
         						 trainingDuradtion != TrainingDuration.SHORT,
         						 similarKnowledge == Knowledge.ADVANCED) @Watch (!userId)
@@ -38,9 +40,14 @@ rule "Choose beginer trainig level"
 	no-loop 
 	salience 100
     when
-        $tfc : TrainingChooseFact(userHealthState == UserHealthState.BAD || 
-        						 previousKnowledge == Knowledge.BEGINER ||
-        						 similarKnowledge == Knowledge.BEGINER) @Watch (!userId);
+        $tfc : TrainingChooseFact(
+        						 choosenLevel != TrainingLevel.BEGINNER,
+        						 	(
+        						 		userHealthState == UserHealthState.BAD || 
+        						 		previousKnowledge == Knowledge.BEGINER ||
+        						 		similarKnowledge == Knowledge.BEGINER
+        						 	)		
+        						 )@Watch (!userId);
     then
     	System.out.println("beginer tr lvl");
     	$tfc.setChoosenLevel(TrainingLevel.BEGINNER);
@@ -52,6 +59,7 @@ rule "Choose intermediate training level"
 	salience 80
     when
         $tfc : TrainingChooseFact(choosenLevel == TrainingLevel.UNKNOWN,
+        						  choosenLevel != TrainingLevel.INTERMEDIATE,
         						 userHealthState != UserHealthState.UNKNOWN);
     then
     	System.out.println("srednji tr lvl");

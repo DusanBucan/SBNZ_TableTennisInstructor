@@ -25,9 +25,7 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
     private KieSessionService kieSessionService;
 
     @Override
-    public TrainingChooseFact findTrainingPlan() {
-        TrainingChooseRequestFact tcReq = new TrainingChooseRequestFact();
-        ArrayList<Skill> allSkills = prepareReq(tcReq);
+    public TrainingChooseFact findTrainingPlan(TrainingChooseRequestFact tcReq, ArrayList<Skill> allSkills) {
         KieSession kieSession =  kieSessionService.getKieSessionForTrainingPlan(allSkills);
         kieSession.insert(tcReq);
 
@@ -63,83 +61,4 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
         return tfc;
     }
 
-
-    public ArrayList<Skill> prepareReq(TrainingChooseRequestFact tcReq) {
-
-        UserHealth uh = new UserHealth(null, new Date(),
-                65, 124, 72, UserHealthState.UNKNOWN);
-
-        Skill skill = new Skill();
-        skill.setSkillId(1l);
-        skill.setSkillGroup(1);
-
-        Skill skill2 = new Skill();
-        skill2.setSkillId(3l);
-        skill2.setSkillLevel(SkillLevel.INTERMEDIATE);
-        skill2.setSkillGroup(1);
-
-        Skill skill4 = new Skill();
-        skill4.setSkillId(4l);
-        skill4.setSkillLevel(SkillLevel.BEGINER);
-        skill4.setSkillGroup(1);
-
-        Skill skill1 = new Skill();
-        skill1.setSkillId(2l);
-        skill1.setSkillLevel(SkillLevel.BEGINER);
-        skill1.setSkillGroup(1);
-
-
-        Training trening =  new Training();
-        trening.setSkill(skill);
-        trening.setTrainingLevel(TrainingLevel.INTERMEDIATE);
-
-        Training trening2 =  new Training();
-        trening2.setSkill(skill1);
-        trening2.setTrainingLevel(TrainingLevel.INTERMEDIATE);
-
-        Training trening3 =  new Training();
-        trening3.setSkill(skill2);
-        trening3.setTrainingLevel(TrainingLevel.INTERMEDIATE);
-
-        Training trening4 =  new Training();
-        trening4.setSkill(skill4);
-        trening4.setTrainingLevel(TrainingLevel.INTERMEDIATE);
-
-
-        TrainingExecution trainingExecution = new TrainingExecution();
-        trainingExecution.setTraining(trening);
-        trainingExecution.setTrainingMark(TrainingMark.EXCELLENT);
-
-        TrainingExecution trainingExecution2 = new TrainingExecution();
-        trainingExecution2.setTraining(trening2);
-        trainingExecution2.setTrainingMark(TrainingMark.GOOD);
-
-        TrainingExecution trainingExecution3 = new TrainingExecution();
-        trainingExecution3.setTraining(trening3);
-        trainingExecution3.setTrainingMark(TrainingMark.GOOD);
-
-        TrainingExecution trainingExecution4 = new TrainingExecution();
-        trainingExecution4.setTraining(trening4);
-        trainingExecution4.setTrainingMark(TrainingMark.GOOD);
-
-        ArrayList<TrainingExecution> trainHistory = new ArrayList<>();
-        trainHistory.add(trainingExecution);
-        trainHistory.add(trainingExecution2);
-        trainHistory.add(trainingExecution3);
-        trainHistory.add(trainingExecution4);
-
-        tcReq.setUserId(1l);
-        tcReq.setDesiredSkill(skill);
-        tcReq.setUserHealth(uh);
-        tcReq.setTrainingDuration(4.0);
-        tcReq.setTrainHistory(trainHistory);
-
-        ArrayList<Skill> allSkills = new ArrayList<>();
-        allSkills.add(skill);
-        allSkills.add(skill1);
-        allSkills.add(skill2);
-        allSkills.add(skill4);
-
-        return allSkills;
-    }
 }

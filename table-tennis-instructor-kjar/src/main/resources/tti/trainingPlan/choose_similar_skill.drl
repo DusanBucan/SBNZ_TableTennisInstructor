@@ -71,7 +71,7 @@ rule "Choose INTERMEDIATE similiar skill knowledge if knows only more similar sk
     	 						result(count)
     	 					)
 	then
-		System.out.println("Slicno znanje je INTERMEDIATE jer zna samo vise slicnih pocetnickog lvl");
+		System.out.println("Slicno znanje je INTERMEDIATE jer zna vise slicnih pocetnickog lvl");
     	$tfc.setSimilarKnowledge(Knowledge.INTERMEDIATE);
     	update($tfc);
 end
