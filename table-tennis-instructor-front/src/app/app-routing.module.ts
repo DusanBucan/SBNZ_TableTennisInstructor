@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -7,20 +7,22 @@ import { RegisterComponent } from './core/register/register.component';
 import { ProfileComponent } from './core/profile/profile.component';
 import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
-import { EventsListComponent } from './events/events-list/events-list.component';
 import { AddEventComponent } from './core/add-event/add-event.component';
-import { EventDetailsComponent } from './events/event-details/event-details.component';
 import { ReservationComponent } from './events/reservation/reservation.component';
+import { ListTrainingComponent } from './trainings/list-training/list-training.component';
+import { TrainingDetailsComponent } from './trainings/training-details/training-details.component';
+import { FindTrainingComponent } from './trainings/find-training/find-training.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [LoginGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
-  { path: 'events', component: EventsListComponent },
-  { path: 'event/:id', component: EventDetailsComponent },
+  { path: 'training', component: ListTrainingComponent },
+  { path: 'training/:id', component: TrainingDetailsComponent },
+  { path: 'findTrainig', component: FindTrainingComponent},
   { path: 'reservation/:id' , component: ReservationComponent},
-  { path: 'add-event', component: AddEventComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN'}}
-
+  { path: 'add-event', component: AddEventComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN'}},
+  { path: '**', redirectTo: 'training'}
 ];
 
 @NgModule({

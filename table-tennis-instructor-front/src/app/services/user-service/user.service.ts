@@ -35,7 +35,7 @@ export class UserService {
   }
 
   public getUserFromLocalStorage() {
-    let user: User = new User();
+    let user: User;
     const u = localStorage.getItem('user');
     if (!u) {
       const token = this.authService.getToken();
@@ -44,7 +44,7 @@ export class UserService {
         localStorage.setItem('user', JSON.stringify(data));
       });
     }
-    user = user.deserialize(u);
+    user = JSON.parse(u);
     return user;
   }
 }

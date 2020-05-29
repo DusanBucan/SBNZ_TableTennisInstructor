@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,14 +19,21 @@ import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
 import { AuthService } from './services/auth-service/auth.service';
 import { TicketService } from './services/ticket-service/ticket.service';
-import { EventsListComponent } from './events/events-list/events-list.component';
-import { EventDetailsComponent } from './events/event-details/event-details.component';
-import { EventListItemComponent } from './events/event-list-item/event-list-item.component';
 import { EventService } from './services/event-service/event.service';
 import { HallService } from './services/hall-service/hall.service';
 import { PlaceService } from './services/place-service/place.service';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { ReservationComponent } from './events/reservation/reservation.component';
+import { ListTrainingComponent } from './trainings/list-training/list-training.component';
+import { TrainingService } from './services/training-service/training.service';
+
+
+
+import { TrainingListItemComponent } from './trainings/training-list-item/training-list-item.component';
+import { TrainingDetailsComponent } from './trainings/training-details/training-details.component';
+import { FindTrainingComponent } from './trainings/find-training/find-training.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { SkillService } from './services/skill-service/skill.service';
 
 
 
@@ -38,19 +45,20 @@ import { ReservationComponent } from './events/reservation/reservation.component
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    EventsListComponent,
-    EventDetailsComponent,
-    EventListItemComponent,
     AddEventComponent,
     DateFormatPipe,
-    ReservationComponent
+    ReservationComponent,
+    ListTrainingComponent,
+    TrainingListItemComponent,
+    TrainingDetailsComponent,
+    FindTrainingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     UserService,
@@ -61,7 +69,14 @@ import { ReservationComponent } from './events/reservation/reservation.component
     HallService,
     PlaceService,
     LoginGuard,
-    RoleGuard
+    RoleGuard,
+    TrainingService,
+    SkillService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

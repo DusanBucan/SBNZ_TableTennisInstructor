@@ -1,6 +1,7 @@
 package tableTennisInstructor.controller;
 
 import tableTennisInstructor.dto.request.PasswordChangerDTO;
+import tableTennisInstructor.dto.request.RegisterDTO;
 import tableTennisInstructor.dto.response.UserDTO;
 import tableTennisInstructor.dto.response.UserTokenDTO;
 import tableTennisInstructor.security.TokenUtils;
@@ -16,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+
 @RestController
-@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
     @Autowired
@@ -33,6 +35,12 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody @Valid LoginDTO authenticationRequest) {
         return new ResponseEntity<>(userDetailsService.login(authenticationRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO authenticationRequest) {
+        userDetailsService.register(authenticationRequest);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/refresh")

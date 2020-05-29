@@ -1,11 +1,28 @@
 package tableTennisInstructor.model.drools.facts.skill;
 
-public class Skill {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "skill")
+public class Skill {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name = "skillId")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long skillId;
+
+	@Column(name = "name")
 	public String name;
-	public String execution_description;
+
+	@Column(name = "executionDescription")
+	public String executionDescription;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "skillLevel")
 	public SkillLevel skillLevel;
+
+	@Column(name = "skillGroup")
 	public int skillGroup;
 
 	public Skill() {}
@@ -22,11 +39,12 @@ public class Skill {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getExecution_description() {
-		return execution_description;
+		return executionDescription;
 	}
 	public void setExecution_description(String execution_description) {
-		this.execution_description = execution_description;
+		this.executionDescription = execution_description;
 	}
 	public SkillLevel getSkillLevel() {
 		return skillLevel;

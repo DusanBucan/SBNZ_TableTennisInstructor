@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,14 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
+
+
+    public void registration(Authority authority) {
+        this.authorities = new ArrayList<>();
+        this.authorities.add(authority);
+        this.setEnabled(true);
+        this.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
+    }
 
 
     public Long getId() {

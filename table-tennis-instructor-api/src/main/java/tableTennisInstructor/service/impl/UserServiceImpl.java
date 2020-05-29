@@ -31,12 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findByUsername(String username) throws ApiRequestException {
-        try {
-            User user = userRepository.findByUsername(username);
-            return new UserDTO(user);
-        } catch (UsernameNotFoundException e) {
-            throw new ApiRequestException("User with username '" + username + "' doesn't exist.");
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new ApiRequestException("User with username '" + username + "' doesn't exist."));
+        return new UserDTO(user);
     }
 
     @Override

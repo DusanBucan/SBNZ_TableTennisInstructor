@@ -6,13 +6,13 @@ import org.kie.api.runtime.ObjectFilter;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tableTennisInstructor.dto.request.TrainingChooseRequestFactDTO;
 import tableTennisInstructor.model.drools.facts.UserHealth;
 import tableTennisInstructor.model.drools.facts.UserHealthState;
 import tableTennisInstructor.model.drools.facts.skill.Skill;
 import tableTennisInstructor.model.drools.facts.skill.SkillLevel;
 import tableTennisInstructor.model.drools.facts.training.*;
-import tableTennisInstructor.service.KieSessionService;
-import tableTennisInstructor.service.TrainingPlanService;
+import tableTennisInstructor.service.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +23,34 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
 
     @Autowired
     private KieSessionService kieSessionService;
+
+    @Autowired
+    private SkillService skillService;
+
+    @Autowired
+    private UserHealthService userHealthService;
+
+    @Autowired
+    private TrainingExecutionService trainingExecutionService;
+
+    @Override
+    public TrainingChooseRequestFact processDTO(TrainingChooseRequestFactDTO requestFactDTO) {
+
+        TrainingChooseRequestFact trainingChooseRequestFact = new TrainingChooseRequestFact();
+        trainingChooseRequestFact.setTrainingDuration(requestFactDTO.trainingDuration);
+        trainingChooseRequestFact.setUserId(requestFactDTO.userId);
+
+        Skill desiredSkill = skillService.findBySkillId(requestFactDTO.desiredSkillId);
+        trainingChooseRequestFact.setDesiredSkill(desiredSkill);
+
+        UserHealth userHealth = userHealthService.findUserHealthByUserId(requestFactDTO.userId);
+        trainingChooseRequestFact.setUserHealth(userHealth);
+
+        ArrayList<TrainingExecution> trainingExecutions =  trainingExecutionService.findByUserId(requestFactDTO.userId);
+        trainingChooseRequestFact.setTrainHistory(trainingExecutions);
+
+        return trainingChooseRequestFact;
+    }
 
     @Override
     public TrainingChooseFact findTrainingPlan(TrainingChooseRequestFact tcReq, ArrayList<Skill> allSkills) {

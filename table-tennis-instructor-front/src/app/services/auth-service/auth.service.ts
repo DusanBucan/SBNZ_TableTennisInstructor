@@ -30,16 +30,16 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getUserRole() {
-    const token = this.getToken();
-    const jwt: JwtHelperService = new JwtHelperService();
+  getUser() {
+    return localStorage.getItem('user');
+  }
 
-    if (!token) {
+  getUserRole() {
+    const user = this.getUser();
+    if (!user) {
       return 'GUEST';
     }
-
-    const info = jwt.decodeToken(token);
-
-    return info.role[0].authority;
+    const auth = JSON.parse(user).authorities;
+    return auth[0];
   }
 }

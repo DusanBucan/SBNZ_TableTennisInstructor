@@ -2,15 +2,36 @@ package tableTennisInstructor.model.drools.facts;
 
 import tableTennisInstructor.model.User;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "userHealth")
 public class UserHealth {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id")
     private User user;
+
+    @Column(name = "date")
     private Date date;
+
+    @Column(name = "heartbeat")
     private Integer heartbeat;
+
+    @Column(name = "systolic")
     private Integer systolic;
+
+    @Column(name = "diastolic")
     private Integer diastolic;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "userHealthState")
     private UserHealthState userHealthState;
 
     public UserHealth() {

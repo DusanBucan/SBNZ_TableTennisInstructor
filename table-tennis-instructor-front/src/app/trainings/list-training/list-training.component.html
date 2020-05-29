@@ -1,0 +1,7 @@
+<div>
+    <mat-grid-list cols="4" rowHeight="2:3">
+      <mat-grid-tile *ngFor="let training of trainings" >
+        <app-training-list-item class="card" [training]='training'></app-training-list-item>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>

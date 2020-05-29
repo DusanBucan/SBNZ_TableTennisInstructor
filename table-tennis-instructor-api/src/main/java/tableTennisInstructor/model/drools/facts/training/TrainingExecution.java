@@ -3,20 +3,31 @@ package tableTennisInstructor.model.drools.facts.training;
 
 import tableTennisInstructor.model.User;
 
+import javax.persistence.*;
 import java.util.Date;
 
-//@Entity
-//@Table(name = "trainningExecutions")
+@Entity
+@Table(name = "trainingExecution")
 public class TrainingExecution {
 
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name="user_id")
     public User user;
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name="training_id")
     public Training training;
+
+	@Column(name = "date")
     public Date date;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "trainingMark")
     public TrainingMark trainingMark;
     
     public TrainingExecution() {

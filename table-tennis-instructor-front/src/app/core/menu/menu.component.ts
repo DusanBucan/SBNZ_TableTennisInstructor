@@ -23,8 +23,20 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
   }
+  toTrainings() {
+    this.router.navigateByUrl('/training');
+  }
 
-  showEvents() {
-    this.router.navigate(['/events']);
+  newSkill() {
+    console.log('new skill');
+  }
+  newTraining() {
+    console.log('new Training');
+  }
+  myHistory() {
+    console.log('myHistory');
+  }
+  findTraining() {
+    this.router.navigateByUrl('/findTrainig');
   }
 }
