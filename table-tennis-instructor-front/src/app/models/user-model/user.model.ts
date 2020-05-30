@@ -9,12 +9,12 @@ export class User implements Deserializable {
   public password: string;
   public authorities: any[];
 
-
   constructor(data: any) {
     this.id = data.id;
     this.name = data.firstName;
     this.surname = data.lastName;
     this.email = data.email;
+    this.username = data.username;
     this.authorities = data.authorities;
   }
 

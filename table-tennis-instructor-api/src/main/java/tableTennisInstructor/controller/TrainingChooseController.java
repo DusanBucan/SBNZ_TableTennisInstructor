@@ -35,7 +35,7 @@ public class TrainingChooseController {
     private SkillService skillService;
 
 
-    //@TODO: ima neki bug treba videti sto puca u nekim slucajevimas
+    //@TODO: ima neki bug treba videti sto puca u nekim slucajevima
 
     @PostMapping(path = "/find", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_REGULAR')")

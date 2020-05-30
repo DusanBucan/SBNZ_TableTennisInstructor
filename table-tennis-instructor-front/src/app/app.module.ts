@@ -34,6 +34,8 @@ import { TrainingDetailsComponent } from './trainings/training-details/training-
 import { FindTrainingComponent } from './trainings/find-training/find-training.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { SkillService } from './services/skill-service/skill.service';
+import { UserHealthComponent } from './core/user-health/user-health.component';
+import { UserHealthService } from './services/user-health/user-health.service';
 
 
 
@@ -51,7 +53,8 @@ import { SkillService } from './services/skill-service/skill.service';
     ListTrainingComponent,
     TrainingListItemComponent,
     TrainingDetailsComponent,
-    FindTrainingComponent
+    FindTrainingComponent,
+    UserHealthComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ import { SkillService } from './services/skill-service/skill.service';
     RoleGuard,
     TrainingService,
     SkillService,
+    UserHealthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

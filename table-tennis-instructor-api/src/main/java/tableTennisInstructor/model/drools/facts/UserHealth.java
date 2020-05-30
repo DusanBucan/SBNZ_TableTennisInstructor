@@ -80,6 +80,10 @@ public class UserHealth {
         return date;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Integer getHeartbeat() {
         return heartbeat;
     }

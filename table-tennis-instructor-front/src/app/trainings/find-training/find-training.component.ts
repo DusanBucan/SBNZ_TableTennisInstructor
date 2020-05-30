@@ -42,7 +42,7 @@ export class FindTrainingComponent implements OnInit {
 
   onSubmit(findTraining) {
     this.submitted = true;
-    if (this.findTraining.valid) {
+    if (findTraining.valid) {
       const userId = JSON.parse(this.authService.getUser()).id;
 
       this.trainingSearch =

@@ -1,0 +1,37 @@
+<div>
+    <form [formGroup]="userHealthForm" (ngSubmit)="onSubmit(userHealthForm)">
+        <div>
+            <label for="Heartbeat"> Heartbeat </label><br/>
+            <input id="Heartbeat" type="text" formControlName="heartbeat">
+            <div *ngIf="submitted && heartbeatCntr.errors">
+                <div *ngIf="heartbeatCntr.errors.required">Heartbeat is required</div>
+                <div *ngIf="heartbeatCntr.errors.min">Heartbeat must be greather then 40</div>
+                <div *ngIf="heartbeatCntr.errors.max">Heartbeat must be less then 200</div>
+            </div>
+        </div>
+
+        <div>
+            <label for="Systolic"> Systolics </label><br/>
+            <input id="Systolic" type="text" formControlName="systolic">
+            <div *ngIf="submitted && systolicCntr.errors">
+                <div *ngIf="systolicCntr.errors.required">Systolic is required</div>
+                <div *ngIf="systolicCntr.errors.min">Systolic must be greather then 40</div>
+                <div *ngIf="systolicCntr.errors.max">Systolic must be less then 200</div>
+            </div>
+        </div>
+
+        <div>
+            <label for="Diastolic"> Diastolic </label><br/>
+            <input id="Diastolic" type="text" formControlName="diastolic">
+            <div *ngIf="submitted && diastolicCntr.errors">
+                <div *ngIf="diastolicCntr.errors.required">Diastolic is required</div>
+                <div *ngIf="diastolicCntr.errors.min">Diastolic must be greather then 40</div>
+                <div *ngIf="diastolicCntr.errors.max">Diastolic must be less then 200</div>
+            </div>
+        </div>
+
+        <button class="button" type="submit">Update</button>
+    </form>
+
+</div>
+

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {httpOptions, authHttpOptions} from '../../util/http-util';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth-service/auth.service';
+import { UserProfile } from 'src/app/models/user-model/user-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,10 @@ export class UserService {
     .subscribe(() => {
       this.router.navigate(['/login']);
     });
+  }
+
+  public updateUserData(user: UserProfile) {
+    return this.http.put(this.usersUrl + '/user', user);
   }
 
   public getUserFromLocalStorage() {
