@@ -31,6 +31,7 @@ rule "Bad Healht condition"
     	 			)
     		 from $userHealth
     then
+    	System.out.println("BAD zdravlje");
     	$tfc.setUserHealthState(UserHealthState.BAD);
         update( $tfc );
 end
@@ -42,6 +43,7 @@ rule "Average Health Condition"
     	$trReq: TrainingChooseRequestFact($userId: userId, $userHealth: userHealth)
     	$tfc: TrainingChooseFact(userId == $userId, userHealthState == UserHealthState.UNKNOWN) @Watch (userId)
     then
+    	System.out.println("AVERAGE zdravlje");
     	$tfc.setUserHealthState(UserHealthState.AVERAGE);
         update( $tfc );
 end

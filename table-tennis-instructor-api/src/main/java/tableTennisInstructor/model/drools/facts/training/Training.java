@@ -1,15 +1,36 @@
 package tableTennisInstructor.model.drools.facts.training;
 
 import tableTennisInstructor.model.drools.facts.skill.Skill;
-import java.util.ArrayList;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+@Entity
+@Table(name = "training")
 public class Training {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long id;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "trainingLevel")
     public TrainingLevel trainingLevel;
-    public Skill skill;
-    public ArrayList<TrainingMistake> mostCommonMistakes;
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name="skill_id")
+	public Skill skill;
+
+	@OneToMany()
+    public Collection<TrainingMistake> mostCommonMistakes;
+
+	@Column(name = "timeToExecute")
     public Double timeToExecute;
-    public ArrayList<TrainingDrill> drills;
+
+	@OneToMany()
+    public Collection<TrainingDrill> drills;
     
     public Training() {}
     
@@ -26,7 +47,7 @@ public class Training {
 		this.skill = skill;
 	}
 	public ArrayList<TrainingMistake> getMostCommonMistakes() {
-		return mostCommonMistakes;
+		return new ArrayList<>(mostCommonMistakes);
 	}
 	public void setMostCommonMistakes(ArrayList<TrainingMistake> mostCommonMistakes) {
 		this.mostCommonMistakes = mostCommonMistakes;
@@ -38,7 +59,7 @@ public class Training {
 		this.timeToExecute = timeToExecute;
 	}
 	public ArrayList<TrainingDrill> getDrills() {
-		return drills;
+		return new ArrayList<>(drills);
 	}
 	public void setDrills(ArrayList<TrainingDrill> drills) {
 		this.drills = drills;

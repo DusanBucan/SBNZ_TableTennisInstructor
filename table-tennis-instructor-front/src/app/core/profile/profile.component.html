@@ -1,0 +1,40 @@
+<div>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit(profileForm)">
+        <div>
+            <label for="Name"> Name </label><br/>
+            <input id="Name" type="text" formControlName="name">
+            <div *ngIf="submitted && nameCntr.errors">
+                <div *ngIf="nameCntr.errors.required">Name is required</div>
+            </div>
+        </div>
+
+        <div>
+            <label for="Surname"> Surname </label><br/>
+            <input id="Surname" type="text" formControlName="surname">
+            <div *ngIf="submitted && surnameCntr.errors">
+                <div *ngIf="surnameCntr.errors.required">Surname is required</div>
+            </div>
+        </div>
+
+        <div>
+            <label for="Email"> Email </label><br/>
+            <input id="Email" type="text" formControlName="email">
+            <div *ngIf="submitted && emailCntr.errors">
+                <div *ngIf="emailCntr.errors.required">Email is required</div>
+            </div>
+        </div>
+
+        <div>
+            <label for="Username"> Username </label><br/>
+            <input id="Username" type="text" formControlName="username">
+            <div *ngIf="submitted && usernameCntr.errors">
+                <div *ngIf="usernameCntr.errors.required">Username is required</div>
+            </div>
+        </div>
+    
+        <button class="button" type="submit">Update</button>
+        <button (click)="goToUserHealth()" type="button" class="button" >UserHealth</button>
+    </form>
+
+</div>
+

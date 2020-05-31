@@ -20,10 +20,7 @@ rule "Find similar Skills to desiredSkill"
 	then
 		SimilarSkillFact $similarSkillFacts = new SimilarSkillFact();
 		$similarSkillFacts.setSkill($desiredSkill);
-		
-		for(Object s : $similarSkills){
-			$similarSkillFacts.addSimilarSkill((Skill)s);
-		}
+		$similarSkillFacts.setSimilarSkillsFromList($similarSkills);
 		insert($similarSkillFacts);
 end
 

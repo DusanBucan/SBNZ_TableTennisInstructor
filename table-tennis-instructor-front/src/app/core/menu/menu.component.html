@@ -1,0 +1,7 @@
+<mat-toolbar color="accent">
+        <button (click)='toTrainings()' mat-button color="primary">Trainings</button>
+        <button (click)='newSkill()' *ngIf="role=='ROLE_ADMIN'" mat-button color="primary">New skill</button>
+        <button (click)='newTraining()' *ngIf="role=='ROLE_ADMIN'" mat-button color="primary">New training</button>
+        <button (click)='myHistory()' *ngIf="role=='ROLE_REGULAR'" mat-button color="primary">My training history</button>
+        <button (click)='findTraining()' *ngIf="role=='ROLE_REGULAR'" mat-button color="primary">Find trainig</button>
+</mat-toolbar>

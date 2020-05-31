@@ -52,7 +52,7 @@ rule "Choose BEGINER similiar skill knowledge if knows only one similar skill at
     	update($tfc);
 end
 
-rule "Choose INTERMEDIATE similiar skill knowledge if knows only more similar skill at BEGINER level"
+rule "Choose INTERMEDIATE similiar skill knowledge if knows more similar skill at BEGINER level"
 	salience 90
 	when
 		$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)

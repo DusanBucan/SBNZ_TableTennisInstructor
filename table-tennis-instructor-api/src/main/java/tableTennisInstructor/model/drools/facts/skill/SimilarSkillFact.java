@@ -17,6 +17,7 @@ public class SimilarSkillFact {
     }
     public void setSkill(Skill skill) {
         this.skill = skill;
+        this.similarSkills.add(skill.getSkillId());
     }
     public List<Long> getSimilarSkills() {
         return similarSkills;
@@ -26,6 +27,13 @@ public class SimilarSkillFact {
     }
     public void addSimilarSkill(Skill similarSkill) {
         this.similarSkills.add(similarSkill.getSkillId());
+    }
+
+    public void setSimilarSkillsFromList(ArrayList<Object> similarSkills)
+    {
+        for(Object s : similarSkills) {
+            this.addSimilarSkill((Skill) s);
+        }
     }
 
 

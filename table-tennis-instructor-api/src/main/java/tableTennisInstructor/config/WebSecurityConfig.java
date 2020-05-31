@@ -59,35 +59,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        final CorsConfiguration config = new CorsConfiguration();
-
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Collections.singletonList("*"));
-        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "X-Auth-Token"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", config);
-
         return new CorsFilter(source);
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
-            // Allow all users to access URLs that have 'public' in them
-            // Allow auth
-            .authorizeRequests()
-            .antMatchers("**/public/**").permitAll()
-            .antMatchers("/auth/**").permitAll()
+                // Allow all users to access URLs that have 'public' in them
+                // Allow auth
+                .authorizeRequests()
+                .antMatchers("**/public/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/training/getAll").permitAll()
+                .antMatchers("/api/skill/getAll").permitAll()
+                .antMatchers("/api/training/getDetails/*").permitAll()
 
-            // All other requests must be authorized
-            .anyRequest().authenticated().and()
+                // All other requests must be authorized
+                .anyRequest().authenticated().and()
 
-            // Intercept every request with filter
-            .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService), BasicAuthenticationFilter.class);
+                .cors().and()
+                // Intercept every request with filter
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
+                        BasicAuthenticationFilter.class);
 
         http.csrf().disable();
     }

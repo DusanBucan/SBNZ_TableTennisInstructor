@@ -1,9 +1,13 @@
 package tableTennisInstructor.service.impl;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import tableTennisInstructor.dto.request.RegisterDTO;
 import tableTennisInstructor.dto.response.UserDTO;
 import tableTennisInstructor.exception.exceptions.ApiRequestException;
+import tableTennisInstructor.model.Authority;
 import tableTennisInstructor.model.User;
 import tableTennisInstructor.dto.response.UserTokenDTO;
+import tableTennisInstructor.repository.AuthorityRepository;
 import tableTennisInstructor.repository.UserRepository;
 import tableTennisInstructor.security.TokenUtils;
 import tableTennisInstructor.dto.request.LoginDTO;
@@ -32,6 +36,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -44,12 +51,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     /* Return User from database */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-        } else {
-            return user;
-        }
+        User user = userRepository.
+                findByUsername(username).
+                orElseThrow( ()-> new UsernameNotFoundException(
+                        String.format("No user found with username '%s'.", username)));
+        return user;
     }
 
     /* Change User's password */
@@ -95,6 +101,21 @@ public class CustomUserDetailsService implements UserDetailsService {
         userDto.setToken(new UserTokenDTO(jwt, expiresIn));
 
         return userDto;
+    }
+
+    public User register(RegisterDTO registerDTO){
+        Authority regular = authorityRepository.findByName("ROLE_REGULAR");
+
+        User user = registerDTO.mapToUser();
+        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new ApiRequestException("Resource with Username exists");
+        } else if(userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new ApiRequestException("Resource with Username exists");
+        }
+        user.registration(regular);
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user = userRepository.save(user);
+        return user;
     }
 
     public UserTokenDTO refreshAuthenticationToken(HttpServletRequest request) throws ApiRequestException {
