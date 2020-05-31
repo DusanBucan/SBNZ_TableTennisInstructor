@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tableTennisInstructor.dto.request.TrainingChooseRequestFactDTO;
 import tableTennisInstructor.model.drools.facts.UserHealth;
 import tableTennisInstructor.model.drools.facts.UserHealthState;
+import tableTennisInstructor.model.drools.facts.skill.SimilarSkillFact;
 import tableTennisInstructor.model.drools.facts.skill.Skill;
 import tableTennisInstructor.model.drools.facts.skill.SkillLevel;
 import tableTennisInstructor.model.drools.facts.training.*;
@@ -57,6 +58,8 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
         KieSession kieSession =  kieSessionService.getKieSessionForTrainingPlan(allSkills);
         kieSession.insert(tcReq);
 
+
+
         kieSession.fireAllRules();
         kieSession.dispose();
 
@@ -78,6 +81,15 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
             }
         };
 
+        ObjectFilter payPassFilter2 = new ObjectFilter() {
+            @Override
+            public boolean accept(Object object) {
+                if ( SimilarSkillFact.class.equals(object.getClass())) return true;
+                if ( SimilarSkillFact.class.equals(object.getClass().getSuperclass())) return true;
+                return false;
+            }
+        };
+
         List<TrainingChooseFact> facts = new ArrayList<>();
         for (FactHandle handle : kieSession.getFactHandles(payPassFilter)) {
             facts.add((TrainingChooseFact) kieSession.getObject(handle));
@@ -86,6 +98,13 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
             System.out.println("No Kjar Results");
         }
         TrainingChooseFact tfc =  facts.get(0);
+
+        List<SimilarSkillFact> facts2 = new ArrayList<>();
+        for (FactHandle handle : kieSession.getFactHandles(payPassFilter2)) {
+            facts2.add((SimilarSkillFact) kieSession.getObject(handle));
+        }
+
+
         return tfc;
     }
 

@@ -12,6 +12,9 @@ import tableTennisInstructor.repository.TrainingRepository;
 import tableTennisInstructor.service.TrainingService;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+
 @Service
 public class TrainingServiceImpl implements TrainingService {
 
@@ -35,8 +38,13 @@ public class TrainingServiceImpl implements TrainingService {
     public ArrayList<Training> findTrainings(TrainingChooseFact trainingChooseFact,
                                              TrainingChooseRequestFact requestFact) {
 
+        ArrayList<Training> retVal = new ArrayList<>();
         TrainingLevel level = trainingChooseFact.getChoosenLevel();
         Skill skill = requestFact.getDesiredSkill();
-        return (ArrayList<Training>) this.trainingRepository.findAllBySkillAndTrainingLevel(skill, level).get();
+        Optional<Collection<Training>> opt = this.trainingRepository.findAllBySkillAndTrainingLevel(skill, level);
+        if (opt.isPresent()) {
+            retVal = (ArrayList<Training>) opt.get();
+        }
+        return retVal;
     }
 }

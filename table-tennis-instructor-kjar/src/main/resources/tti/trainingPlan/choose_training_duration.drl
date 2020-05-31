@@ -21,7 +21,7 @@ rule "Set MEDIUM training duration and create TrainingChooseFact"
         $trReq: TrainingChooseRequestFact($userId: userId, trainingDuration >= 3, trainingDuration < 4 )
         not TrainingChooseFact(userId == $userId)
     then
-    	System.out.println("MEDIUM trening");
+    	System.out.println("MEDIUM duration trening");
     	TrainingChooseFact tfc = new TrainingChooseFact();
     	tfc.setUserId($userId);
     	tfc.setTrainingDuradtion(TrainingDuration.MEDIUM);
@@ -33,7 +33,7 @@ rule "Set SHORT training duration and create TrainingChooseFact"
         $trReq: TrainingChooseRequestFact($userId: userId, trainingDuration < 3)
         not TrainingChooseFact(userId == $userId)
     then
-    	System.out.println("kratak trening");
+    	System.out.println("SHORT duration trening");
     	TrainingChooseFact tfc = new TrainingChooseFact();
     	tfc.setUserId($userId);
     	tfc.setTrainingDuradtion(TrainingDuration.SHORT);

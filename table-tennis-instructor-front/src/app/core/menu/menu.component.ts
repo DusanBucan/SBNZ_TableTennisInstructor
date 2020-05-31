@@ -34,7 +34,7 @@ export class MenuComponent implements OnInit {
     console.log('new Training');
   }
   myHistory() {
-    console.log('myHistory');
+    this.router.navigateByUrl('/trainingHistory');
   }
   findTraining() {
     this.router.navigateByUrl('/findTrainig');

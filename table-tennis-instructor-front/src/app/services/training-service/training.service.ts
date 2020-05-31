@@ -28,6 +28,10 @@ export class TrainingService {
     return this.http.get(this.url + '/getDetails/' + id);
   }
 
+  getTrainingHistotyByUserId(id: number) {
+    return this.http.get(this.url + '/getTrainingHistory/' + id);
+  }
+
   findTrainingPlan(userData: TrainingSearchEntity) {
     return this.http.post(this.findPlanUrl + '/find', userData);
   }

@@ -13,6 +13,7 @@ import { ListTrainingComponent } from './trainings/list-training/list-training.c
 import { TrainingDetailsComponent } from './trainings/training-details/training-details.component';
 import { FindTrainingComponent } from './trainings/find-training/find-training.component';
 import { UserHealthComponent } from './core/user-health/user-health.component';
+import { TrainingHistoryComponent } from './trainings/training-history/training-history.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
@@ -20,8 +21,11 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
   { path: 'training', component: ListTrainingComponent },
   { path: 'training/:id', component: TrainingDetailsComponent },
-  { path: 'findTrainig', component: FindTrainingComponent},
-  { path: 'userHealth', component: UserHealthComponent},
+  { path: 'findTrainig', component: FindTrainingComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
+  { path: 'userHealth', component: UserHealthComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
+  { path: 'trainingHistory', component: TrainingHistoryComponent,
+        canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
+
   { path: 'reservation/:id' , component: ReservationComponent},
   { path: 'add-event', component: AddEventComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN'}},
   { path: '**', redirectTo: 'training'}

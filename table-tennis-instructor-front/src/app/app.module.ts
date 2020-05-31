@@ -36,6 +36,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { SkillService } from './services/skill-service/skill.service';
 import { UserHealthComponent } from './core/user-health/user-health.component';
 import { UserHealthService } from './services/user-health/user-health.service';
+import { TrainingHistoryComponent } from './trainings/training-history/training-history.component';
 
 
 
@@ -54,7 +55,8 @@ import { UserHealthService } from './services/user-health/user-health.service';
     TrainingListItemComponent,
     TrainingDetailsComponent,
     FindTrainingComponent,
-    UserHealthComponent
+    UserHealthComponent,
+    TrainingHistoryComponent
   ],
   imports: [
     BrowserModule,
