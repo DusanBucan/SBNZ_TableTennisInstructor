@@ -1,0 +1,48 @@
+<mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+</mat-form-field>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+         <!-- Id Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> Id </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="skill">
+          <th mat-header-cell *matHeaderCellDef> Skill </th>
+          <td mat-cell *matCellDef="let element"> {{element.skillName}} </td>
+        </ng-container>
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="skillLvl">
+            <th mat-header-cell *matHeaderCellDef> Skill Level </th>
+            <td mat-cell *matCellDef="let element"> {{element.skillLvl}} </td>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="executionDescription">
+            <th mat-header-cell *matHeaderCellDef> Execution Description</th>
+            <td mat-cell *matCellDef="let element"> {{element.executionDescription}} </td>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="skillGroup">
+            <th mat-header-cell *matHeaderCellDef> Skill Group</th>
+            <td mat-cell *matCellDef="let element"> {{element.skillGroup}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions</th>
+            <td mat-cell *matCellDef="let element">
+                <button (click)="deleteSkill(element.id)" mat-raised-button color="primary">Delete</button>
+             </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+

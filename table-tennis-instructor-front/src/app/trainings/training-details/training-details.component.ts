@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TrainingService } from 'src/app/services/training-service/training.service';
 import { TrainingEntity } from 'src/app/models/training-model/training.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TrainingDrillEntity } from '../../models/training-model/training-drill.model';
+import { TrainingMistakeEntity } from '../../models/training-model/training-mistake.model';
 
 @Component({
   selector: 'app-training-details',
@@ -25,6 +27,7 @@ export class TrainingDetailsComponent implements OnInit {
       this.trainingService.getTrainingDetails(id).subscribe(
         (data: TrainingEntity) => {
           this.training = data;
+          console.log(this.training);
         }
         , (error: HttpErrorResponse) => {
           console.error(error.message);
@@ -32,5 +35,10 @@ export class TrainingDetailsComponent implements OnInit {
       );
       }
     }
+
+  startTraining() {
+    console.log('begin simulation');
+  }
+
 
 }

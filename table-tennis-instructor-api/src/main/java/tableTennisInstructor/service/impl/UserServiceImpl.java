@@ -26,6 +26,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(()-> new ApiRequestException("User with username '" + username + "' doesn't exist."));
+    }
+
+    @Override
     public UserDTO findById(Long id) throws ApiRequestException {
         try {
             User user = userRepository.findById(id).get();

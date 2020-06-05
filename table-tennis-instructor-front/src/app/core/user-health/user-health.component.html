@@ -30,7 +30,8 @@
             </div>
         </div>
 
-        <button class="button" type="submit">Update</button>
+        <button *ngIf="!firstTime" class="button" type="submit">Update</button>
+        <button *ngIf="firstTime" class="button" type="submit">Add</button>
     </form>
 
 </div>

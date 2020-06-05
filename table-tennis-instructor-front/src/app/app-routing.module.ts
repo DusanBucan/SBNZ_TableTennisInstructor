@@ -14,12 +14,20 @@ import { TrainingDetailsComponent } from './trainings/training-details/training-
 import { FindTrainingComponent } from './trainings/find-training/find-training.component';
 import { UserHealthComponent } from './core/user-health/user-health.component';
 import { TrainingHistoryComponent } from './trainings/training-history/training-history.component';
+import { SkillListComponent } from './skills/skill-list/skill-list.component';
+import { SkillAddComponent } from './skills/skill-add/skill-add.component';
+import { TrainingAddComponent } from './trainings/training-add/training-add.component';
+import { AddRuleComponent } from './rules/add-rule/add-rule.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [LoginGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
   { path: 'training', component: ListTrainingComponent },
+  { path: 'newTraining', component: TrainingAddComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|'}},
+  { path: 'skills', component: SkillListComponent},
+  { path: 'newSkill', component: SkillAddComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|'}},
+  { path: 'newRule', component: AddRuleComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|'}},
   { path: 'training/:id', component: TrainingDetailsComponent },
   { path: 'findTrainig', component: FindTrainingComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},
   { path: 'userHealth', component: UserHealthComponent, canActivate: [RoleGuard], data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGULAR'}},

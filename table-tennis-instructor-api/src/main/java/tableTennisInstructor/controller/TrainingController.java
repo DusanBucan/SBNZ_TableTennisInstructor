@@ -42,5 +42,19 @@ public class TrainingController {
         return new ResponseEntity<>(trainingExecutions, HttpStatus.OK);
     }
 
+    @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Training> add(@RequestBody Training training) {
+        Training addedTraining = this.trainingService.add(training);
+        return new ResponseEntity<>(addedTraining, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        Training tr = trainingService.getById(id);
+        trainingService.delete(tr);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 
 }

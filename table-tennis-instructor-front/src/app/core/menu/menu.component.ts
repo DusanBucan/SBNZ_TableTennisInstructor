@@ -23,15 +23,21 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
   }
+
   toTrainings() {
     this.router.navigateByUrl('/training');
   }
-
+  toSkills() {
+    this.router.navigateByUrl('/skills');
+  }
   newSkill() {
-    console.log('new skill');
+    this.router.navigateByUrl('/newSkill');
   }
   newTraining() {
-    console.log('new Training');
+    this.router.navigateByUrl('/newTraining');
+  }
+  newRule() {
+    this.router.navigateByUrl('/newRule');
   }
   myHistory() {
     this.router.navigateByUrl('/trainingHistory');
@@ -39,4 +45,5 @@ export class MenuComponent implements OnInit {
   findTraining() {
     this.router.navigateByUrl('/findTrainig');
   }
+
 }

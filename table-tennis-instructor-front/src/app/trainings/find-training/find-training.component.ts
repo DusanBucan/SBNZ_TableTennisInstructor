@@ -6,6 +6,9 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { SkillService } from 'src/app/services/skill-service/skill.service';
 import { SkillEntity } from 'src/app/models/skill-model/skill.model';
 import { TrainingEntity } from 'src/app/models/training-model/training.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserHealthService } from 'src/app/services/user-health/user-health.service';
 
 @Component({
   selector: 'app-find-training',
@@ -22,13 +25,17 @@ export class FindTrainingComponent implements OnInit {
 
   trainingDurationCntr: FormControl;
   desiredSkillCntr: FormControl;
+  dataSource;
 
   constructor(
     private trainingService: TrainingService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private skillService: SkillService
+    private skillService: SkillService,
+    private userHealthService: UserHealthService
   ) {
+
+    this.dataSource = null;
 
     this.trainingDurationCntr = new FormControl({ value: '', disabled: false},
        [Validators.required, Validators.min(0)]);
@@ -45,6 +52,8 @@ export class FindTrainingComponent implements OnInit {
     this.skillService.getAll().subscribe(data => {
       this.skills = data as SkillEntity[];
       this.trainings = [];
+    }, (err: HttpErrorResponse) => {
+      console.log(err.message);
     });
   }
 
@@ -57,10 +66,33 @@ export class FindTrainingComponent implements OnInit {
     this.trainings = [];
     if (findTraining.status === 'VALID') {
       const userId = JSON.parse(this.authService.getUser()).id;
+      let haveUh = false;
+      this.userHealthService.findUserHealthById(userId)
+        .subscribe(res => {
+            if (res !== null) {
+              haveUh = true;
+            }
+        },
+        (err: HttpErrorResponse) => {
+          alert('morate prvo uneti podatke o UserHealt');
+          console.log(err.message);
+          console.log('greskaa');
+        },
+        () => {
+          if (haveUh) {
+            console.log('dosaoo');
+            this.findTrainingHelper(userId);
+          } else {
+            alert('morate prvo uneti podatke o UserHealt');
+          }
+        });
+      }
+    }
 
+  findTrainingHelper(userId: number) {
       this.trainingSearch =
-         new TrainingSearchEntity(userId, null, this.desiredSkillCntr.value,
-                this.trainingDurationCntr.value);
+      new TrainingSearchEntity(userId, null, this.desiredSkillCntr.value,
+            this.trainingDurationCntr.value);
 
       console.log(this.trainingSearch);
 
@@ -68,8 +100,24 @@ export class FindTrainingComponent implements OnInit {
         res => {
           console.log(res);
           this.trainings = res as TrainingEntity[];
+          this.dataSource = new MatTableDataSource(
+            this.trainings.map(t => {
+              return {
+                id : t.id,
+                name: t.skill.name,
+                trainingLv: t.trainingLevel,
+                skillLvl: t.skill.skillLevel,
+                timeToExecute : t.timeToExecute,
+              };
+            })
+          );
       });
-    }
+  }
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }

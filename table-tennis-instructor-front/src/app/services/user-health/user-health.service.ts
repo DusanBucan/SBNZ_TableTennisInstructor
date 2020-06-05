@@ -24,4 +24,8 @@ export class UserHealthService {
     return this.http.put(this.userHealhtPath, uh);
   }
 
+  addUserHealth(userHealth: UserHealthEntity) {
+    return this.http.post(this.userHealhtPath, userHealth);
+  }
+
 }

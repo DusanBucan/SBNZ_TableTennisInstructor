@@ -8,6 +8,7 @@ import java.util.List;
 public interface UserService {
 
     User getById(Long id);
+    User getByUsername(String username);
     UserDTO findById(Long id);
     UserDTO findByUsername(String username);
     List<UserDTO> findAll();

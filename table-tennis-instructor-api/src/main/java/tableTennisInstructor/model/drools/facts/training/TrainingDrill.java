@@ -13,4 +13,31 @@ public class TrainingDrill {
 
     private String description;
     private Integer repetitons;
+
+    public TrainingDrill() {
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setRepetitons(Integer repetitons) {
+        this.repetitons = repetitons;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Integer getRepetitons() {
+        return repetitons;
+    }
 }
