@@ -1,0 +1,70 @@
+<div class="main-div">
+
+    <button (click)="showModalTrainingMistake()" class="button" type="button">Add Training Mistake</button>
+    <button (click)="showModalTrainingDrill()"class="button" type="button">Add Training Drill</button>
+
+    <form [formGroup]="addTrainingForm" (ngSubmit)="onSubmit(addTrainingForm)">
+        <button class="button" type="submit">Add Training</button>
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label> Time to execute</mat-label>
+                <input matInput [formControl]="timeToExecuteCntr" placeholder="Time to execute">
+                <mat-error *ngIf="submitted
+                        && timeToExecuteCntr.errors && timeToExecuteCntr.errors.required">
+                        Time to execute is required
+                </mat-error>
+              </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field>
+                <mat-label>Skill</mat-label>
+                <mat-select [formControl]="skillCntr">
+                    <mat-option *ngFor="let skill of allSkills" [value]="skill">
+                      {{skill.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="submitted && skillCntr.errors">
+                <div *ngIf="skillCntr.errors.required">Skill is required</div>
+            </div>
+        </div>
+
+        <div>
+            <mat-form-field>
+                <mat-label>Training Level</mat-label>
+                <mat-select [formControl]="trainingLevelCntr">
+                    <mat-option *ngFor="let trainingLvl of trainingLevels" [value]="trainingLvl">
+                      {{trainingLvl}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="submitted && trainingLevelCntr.errors">
+                <div *ngIf="trainingLevelCntr.errors.required">Training Level is required</div>
+            </div>
+        </div>
+
+
+        <div *ngIf="trainingDrills.length>0">
+            <mat-label>Training Drills</mat-label>
+            <mat-list role="list">
+                <mat-list-item *ngFor="let trainingDrill of trainingDrills" role="listitem">
+                    {{trainingDrill.description}} reps: {{trainingDrill.repetitons}}
+                    <button (click)="removeDrill(trainingDrill)" mat-raised-button color="warn">Remove</button>
+                </mat-list-item>
+            </mat-list>
+        </div>
+
+        <div *ngIf="trainingMistakes.length>0">
+            <mat-label>Training Mistakes</mat-label>
+            <mat-list role="list">
+                <mat-list-item *ngFor="let trainingMistake of trainingMistakes" role="listitem">
+                    {{trainingMistake.description}} solution: {{trainingMistake.solution}}
+                    <button (click)="removeMistake(trainingMistake)" mat-raised-button color="warn">Remove</button>
+                </mat-list-item>
+            </mat-list>
+        </div>
+
+    </form>
+</div>
+

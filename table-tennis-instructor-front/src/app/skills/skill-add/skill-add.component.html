@@ -1,0 +1,52 @@
+<div class="main-div">
+    <form [formGroup]="addSkillForm" (ngSubmit)="onSubmit(addSkillForm)">
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label> Name</mat-label>
+                <input matInput formControlName="name" placeholder="Name ">
+                <mat-error *ngIf="submitted && nameCntr.errors && nameCntr.errors.required">
+                    Name is required
+                </mat-error>
+              </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label> Execution Description </mat-label>
+                <textarea matInput formControlName="executionDescription" placeholder="Execution Description ">
+                </textarea>
+                <mat-error *ngIf="submitted
+                        && executionDescriptionCntr.errors && executionDescriptionCntr.errors.required">
+                        Execution Description is required
+                </mat-error>
+              </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label> Skill Group</mat-label>
+                <input matInput formControlName="skillGroup" placeholder="Skill Group">
+                <mat-error *ngIf="submitted
+                        && skillGroupCntr.errors && skillGroupCntr.errors.required">
+                        Skill Group is required
+                </mat-error>
+              </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field>
+                <mat-label>Skill Level</mat-label>
+                <mat-select [formControl]="skillLevelCntr">
+                    <mat-option *ngFor="let skillLvl of skillLevels" [value]="skillLvl">
+                      {{skillLvl}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="submitted && skillLevelCntr.errors">
+                <div *ngIf="skillLevelCntr.errors.required">Skill is required</div>
+            </div>
+        </div>
+
+        <button class="button" type="submit">Add</button>
+    </form>
+</div>

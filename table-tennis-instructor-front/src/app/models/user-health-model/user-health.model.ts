@@ -7,8 +7,8 @@ export class UserHealthEntity {
     public diastolic: number;
 
 
-    constructor(id: number, userId: number, heartbeat: number,
-                systolic: number, diastolic: number) {
+    constructor(id?: number, userId?: number, heartbeat?: number,
+                systolic?: number, diastolic?: number) {
         this.id = id;
         this.userId = userId;
         this.heartbeat = heartbeat;

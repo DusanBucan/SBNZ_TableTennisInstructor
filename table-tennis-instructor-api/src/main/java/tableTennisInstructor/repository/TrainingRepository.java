@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface TrainingRepository extends JpaRepository<Training, Long> {
 
     Optional<Collection<Training>> findAllBySkillAndTrainingLevel(Skill skill, TrainingLevel trainingLevel);
+
+    Optional<Collection<Training>> findAllBySkill(Skill skill);
  }

@@ -29,7 +29,6 @@ import { TrainingService } from './services/training-service/training.service';
 
 
 
-import { TrainingListItemComponent } from './trainings/training-list-item/training-list-item.component';
 import { TrainingDetailsComponent } from './trainings/training-details/training-details.component';
 import { FindTrainingComponent } from './trainings/find-training/find-training.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
@@ -37,6 +36,12 @@ import { SkillService } from './services/skill-service/skill.service';
 import { UserHealthComponent } from './core/user-health/user-health.component';
 import { UserHealthService } from './services/user-health/user-health.service';
 import { TrainingHistoryComponent } from './trainings/training-history/training-history.component';
+import { SkillListComponent } from './skills/skill-list/skill-list.component';
+import { SkillAddComponent } from './skills/skill-add/skill-add.component';
+import { TrainingAddComponent, TrainingDrillDialog, TrainingMistakeDialog } from './trainings/training-add/training-add.component';
+import { MatDialogModule, MatListModule } from '@angular/material';
+import { AddRuleComponent } from './rules/add-rule/add-rule.component';
+import { RuleServiceService } from './services/rules-service/rule-service.service';
 
 
 
@@ -52,11 +57,16 @@ import { TrainingHistoryComponent } from './trainings/training-history/training-
     DateFormatPipe,
     ReservationComponent,
     ListTrainingComponent,
-    TrainingListItemComponent,
     TrainingDetailsComponent,
     FindTrainingComponent,
     UserHealthComponent,
-    TrainingHistoryComponent
+    TrainingHistoryComponent,
+    SkillListComponent,
+    SkillAddComponent,
+    TrainingAddComponent,
+    TrainingDrillDialog,
+    TrainingMistakeDialog,
+    AddRuleComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +74,8 @@ import { TrainingHistoryComponent } from './trainings/training-history/training-
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
+    MatDialogModule,
+    MatListModule
   ],
   providers: [
     UserService,
@@ -78,11 +90,16 @@ import { TrainingHistoryComponent } from './trainings/training-history/training-
     TrainingService,
     SkillService,
     UserHealthService,
+    RuleServiceService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
     }
+  ],
+  entryComponents: [
+    TrainingDrillDialog,
+    TrainingMistakeDialog
   ],
   bootstrap: [AppComponent]
 })

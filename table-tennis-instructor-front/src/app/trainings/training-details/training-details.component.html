@@ -1,3 +1,36 @@
-<p>training-details works!</p>
-
-<p>{{training}}</p>
+<div class="main-div">
+<mat-card *ngIf="training" class="example-card">
+    <mat-card-header>
+      <mat-card-title>{{training.skill.name}}</mat-card-title>
+      <mat-card-subtitle>training level {{training.trainingLevel}}</mat-card-subtitle>
+      <mat-card-subtitle>training duration {{training.timeToExecute}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        About skill:<br>
+        skill level: {{training.skill.skillLevel}}<br>
+        skill description: {{training.skill.executionDescription}} <br>
+      </p>
+      <br>
+        <span *ngIf="training.drills!==[]">
+            Drills: <br>
+            <ol>
+                <li *ngFor="let drill of training.drills">
+                    desc: {{drill.description}} reps: {{drill.repetitons}}
+                </li>
+            </ol>
+        </span><br>
+        <span *ngIf="training.mostCommonMistakes!==[]">
+            Mistakes: <br>
+            <ol>
+                <li *ngFor="let mistake of training.mostCommonMistakes">
+                    {{mistake.description}}
+                </li>
+            </ol>
+        </span>
+    </mat-card-content>
+    <mat-card-actions>
+      <button (click)="startTraining()" mat-raised-button color="primary">Start Training</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -19,7 +19,7 @@ public class Training {
 	@Column(name = "trainingLevel")
     public TrainingLevel trainingLevel;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	@JoinColumn(name="skill_id")
 	public Skill skill;
 

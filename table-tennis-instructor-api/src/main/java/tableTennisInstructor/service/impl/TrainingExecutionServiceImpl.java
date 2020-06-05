@@ -2,6 +2,8 @@ package tableTennisInstructor.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tableTennisInstructor.exception.exceptions.ApiRequestException;
+import tableTennisInstructor.model.drools.facts.training.Training;
 import tableTennisInstructor.model.drools.facts.training.TrainingExecution;
 import tableTennisInstructor.repository.TrainingExecutionRepository;
 import tableTennisInstructor.service.TrainingExecutionService;
@@ -16,6 +18,18 @@ public class TrainingExecutionServiceImpl implements TrainingExecutionService {
 
     @Override
     public ArrayList<TrainingExecution> findByUserId(Long userId) {
-        return (ArrayList<TrainingExecution>) trainingExecutionRepository.findAllByUserId(userId).get();
+        return (ArrayList<TrainingExecution>) trainingExecutionRepository.findAllByUserId(userId)
+                .orElseThrow(()-> new ApiRequestException("No Training history for user with id: " + userId));
+    }
+
+    @Override
+    public ArrayList<TrainingExecution> findAllByTraining(Training training) {
+        return (ArrayList<TrainingExecution>) trainingExecutionRepository.findAllByTraining(training);
+    }
+
+    @Override
+    public void deleteAllByTraining(Training tr) {
+        ArrayList<TrainingExecution> toDeleteExecutions = this.findAllByTraining(tr);
+        this.trainingExecutionRepository.deleteAll(toDeleteExecutions);
     }
 }

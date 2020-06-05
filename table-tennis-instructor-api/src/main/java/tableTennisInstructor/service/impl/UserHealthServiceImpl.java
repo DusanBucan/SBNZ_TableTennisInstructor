@@ -37,4 +37,15 @@ public class UserHealthServiceImpl implements UserHealthService {
         }
         return updatedUserHealth;
     }
+
+    @Override
+    public UserHealth add(UserHealthDTO userHealthDTO, User user) {
+        UserHealth userHealth = new UserHealth();
+        userHealth.setUser(user);
+        userHealth.setDate(new Date());
+        userHealth.setDiastolic(userHealthDTO.getDiastolic());
+        userHealth.setSystolic(userHealthDTO.getSystolic());
+        userHealth.setHeartbeat(userHealthDTO.getHeartbeat());
+        return this.userHealthRepository.save(userHealth);
+    }
 }

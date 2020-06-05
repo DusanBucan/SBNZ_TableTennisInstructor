@@ -57,9 +57,6 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
     public TrainingChooseFact findTrainingPlan(TrainingChooseRequestFact tcReq, ArrayList<Skill> allSkills) {
         KieSession kieSession =  kieSessionService.getKieSessionForTrainingPlan(allSkills);
         kieSession.insert(tcReq);
-
-
-
         kieSession.fireAllRules();
         kieSession.dispose();
 

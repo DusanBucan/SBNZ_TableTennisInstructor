@@ -15,11 +15,11 @@ public class TrainingExecution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name="user_id")
     public User user;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name="training_id")
     public Training training;
 
