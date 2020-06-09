@@ -1,0 +1,77 @@
+//created on: May 5, 2020
+package cepTrainingMonitor
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.events.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import java.util.ArrayList;
+import java.lang.Long;
+
+
+//TODO ima BUG koji nzm da resim.. 
+// Uzastopna 3 losa ugla ---> trebalo bi da prva 2 isprocesira i kreira Event za Korekciju
+// NE BI trebalo od 3. Event nista da pravi jer su predhodni isprocesirani..
+// on i od tog 3. pravi novi event KAKO TO RESITI
+
+// prebaci im processed na true ali ih opet gleda tj doda ih u listu
+// u poslednjih 6sek koji mogu da se koriste...
+// ISTO je i za brzinu reketa...
+
+// dobar broj pravila opali, nije vise 
+// atribut processed podesi kako treba na true...
+
+rule "Create RacketAngleCorrectionEvent with correction message when 2 or more badRacketAngles with same angle occurs"
+	salience 100
+    when
+    	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
+    	//
+    	$e1: BadRacketAngleEvent(processed != true, $angle: angle) @watch(!processed) over window:time(2s)
+        $similarE: List(size >= 1) from
+        	accumulate($t: BadRacketAngleEvent
+        					( 
+        					 this != $e1,
+        					 processed != true,
+        					 ((angle > 0  && $angle > 0)|| (angle < 0  && $angle < 0 ))
+        					)
+        			   @watch(!processed) over window:time(6s)
+        			  ,collectList($t))
+    then
+    	modify ($e1) {setProcessed(true);}
+    	for(Object $o: $similarE) {	
+        	 BadRacketAngleEvent $o1 = (BadRacketAngleEvent) $o;
+        	 modify ($o1) {setProcessed(true);}
+        }
+        //System.out.println($similarE);
+        RacketAngleCorrectionEvent raketCorrectionEvent = new RacketAngleCorrectionEvent();
+       	raketCorrectionEvent.setMessage($e1.angle > 0 ? "Zatrovi reket" : "Otvori reket");
+		insert(raketCorrectionEvent);
+        System.out.println("Kreiran event za korekciju ugla reketa");
+
+end
+
+rule "Create RacketAngleCorrectionEvent without correction message when 2 or more badRacketAngles with different angle occurs"
+	salience 90
+    when
+    	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
+    	//
+    	$e1: BadRacketAngleEvent(processed == false) over window:time(2s)
+        $similarE: List(size >= 1) from
+        	accumulate($t: BadRacketAngleEvent
+        					( 
+        					 (this != $e1),
+        					 processed == false
+        					)
+        			   over window:time(6s)
+        			  ,collectList($t))
+    then
+    	modify ($e1) {setProcessed(true);}
+    	for(Object $o: $similarE) {
+        	 BadRacketAngleEvent $o1 = (BadRacketAngleEvent) $o;
+        	 modify ($o1) {setProcessed(true);}
+        }
+        RacketAngleCorrectionEvent raketCorrectionEvent = new RacketAngleCorrectionEvent();
+       	raketCorrectionEvent.setMessage("Nepravilan ugao reketa ali promenljiv");
+		insert(raketCorrectionEvent);
+        System.out.println("Kreiran event za korekciju ugla reketa bez poruke");
+
+end

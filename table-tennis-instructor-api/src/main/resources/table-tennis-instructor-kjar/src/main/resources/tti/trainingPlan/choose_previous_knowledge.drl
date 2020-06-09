@@ -1,0 +1,199 @@
+//created on: May 2, 2020
+package trainingPlan
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.facts.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+
+
+
+rule "BEGINER previous knowledge if none training for this skill is done"
+    when
+		$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	
+    	Number(intValue == 0) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je POCETNICKO jer nema nista u listi");
+    	$tfc.setPreviousKnowledge(Knowledge.BEGINER);
+    	update($tfc);
+end
+
+
+
+
+rule "Choose Beginer level if finished train on INTERMEDIATE and have BAD avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId, trainingMark == TrainingMark.BAD)
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.INTERMEDIATE
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je POCETNICKO");
+    	$tfc.setPreviousKnowledge(Knowledge.BEGINER);
+    	update($tfc);
+end
+
+rule "Choose Beginer level if finished train on Beginer and have BAD or GOOD avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId,
+    		 				  	(trainingMark == TrainingMark.BAD || trainingMark == TrainingMark.GOOD)
+    		 				  )
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.BEGINNER
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je POCETNICKO");
+    	$tfc.setPreviousKnowledge(Knowledge.BEGINER);
+    	update($tfc);
+end
+
+rule "Choose INTERMEDIATE level if finished train on Beginer and have EXCELLENT avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId,
+    		 				  	(trainingMark == TrainingMark.EXCELLENT)
+    		 				  )
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.BEGINNER
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je INTERMEDIATE");
+    	$tfc.setPreviousKnowledge(Knowledge.INTERMEDIATE);
+    	update($tfc);
+end
+
+rule "Choose INTERMEDIATE level if finished train on INTERMEDIATE and have GOOD avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId,
+    		 				  	(trainingMark == TrainingMark.GOOD)
+    		 				  )
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.INTERMEDIATE
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je INTERMEDIATE");
+    	$tfc.setPreviousKnowledge(Knowledge.INTERMEDIATE);
+    	update($tfc);
+end
+
+rule "Choose INTERMEDIATE level if finished train on ADVANCED and have BAD avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId,
+    		 				  	(trainingMark == TrainingMark.BAD)
+    		 				  )
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.ADVANCED
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je INTERMEDIATE");
+    	$tfc.setPreviousKnowledge(Knowledge.INTERMEDIATE);
+    	update($tfc);
+end
+
+rule "Choose ADVANCED level if finished train on INTERMEDIATE and have EXCELLENT avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId,
+    		 				  	(trainingMark == TrainingMark.EXCELLENT)
+    		 				  )
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.INTERMEDIATE
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je ADVANCED");
+    	$tfc.setPreviousKnowledge(Knowledge.ADVANCED);
+    	update($tfc);
+end
+
+rule "Choose ADVANCED level if finished train on ADVANCED and have EXCELLENT or GOOD avgMark for skill"
+    when
+        $trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
+    	$tfc: TrainingChooseFact(userId == $userId)
+    	$avgMark: AverageMark(userId == $userId,
+    		 				  	(trainingMark == TrainingMark.EXCELLENT ||
+    		 				  	 	trainingMark == TrainingMark.GOOD)
+    		 				  )
+    	Number(intValue >=  1) from accumulate (
+    	 						TrainingExecution(
+    	 							training.skill.skillId == $desiredSkill.skillId,
+    	 							training.trainingLevel == TrainingLevel.ADVANCED
+    	 						)	 
+    	 						from $trainHistory,
+    	 						init(int count = 0;),
+    	 						action(count += 1;),
+    	 						reverse(count -= 1;),
+    	 						result(count)
+    	 					)
+    then
+    	System.out.println("predhdno znanje je ADVANCED");
+    	$tfc.setPreviousKnowledge(Knowledge.ADVANCED);
+    	update($tfc);
+end

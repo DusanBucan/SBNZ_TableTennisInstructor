@@ -31,7 +31,6 @@ public class KieSessionServiceImpl implements KieSessionService {
         return kieContainer.newKieSession(cepKieSession);
     }
 
-    //TODO: zameniti da iz baze ucita sve skilove
     public KieSession getKieSessionForTrainingPlan(ArrayList<Skill> allSkills) {
         KieSession kieSession = kieContainer.newKieSession(trainingPlanSessionName);
         kieSession.setGlobal( SKILLS_GLOBAL, allSkills);

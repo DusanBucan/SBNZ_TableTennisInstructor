@@ -1,5 +1,6 @@
 package tableTennisInstructor.service.impl;
 
+import org.apache.maven.shared.invoker.*;
 import org.drools.core.time.SessionPseudoClock;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.ObjectFilter;
@@ -17,7 +18,9 @@ import tableTennisInstructor.model.drools.facts.training.TrainingLevel;
 import tableTennisInstructor.service.KieSessionService;
 import tableTennisInstructor.service.TrainingMonitorService;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
