@@ -9,6 +9,8 @@ import { TrainingEntity } from 'src/app/models/training-model/training.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserHealthService } from 'src/app/services/user-health/user-health.service';
+import { UserService } from 'src/app/services/user-service/user.service';
+import { SimulateTrainingEntity } from 'src/app/models/training-simulate-requst-model/training-simulate-request.model';
 
 @Component({
   selector: 'app-find-training',
@@ -26,13 +28,15 @@ export class FindTrainingComponent implements OnInit {
   trainingDurationCntr: FormControl;
   desiredSkillCntr: FormControl;
   dataSource;
+  displayedColumns: string[] = ['id', 'name', 'trainingLvL', 'skillLvl', 'timeToExecute', 'actions'];
 
   constructor(
     private trainingService: TrainingService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private skillService: SkillService,
-    private userHealthService: UserHealthService
+    private userHealthService: UserHealthService,
+    private userService: UserService
   ) {
 
     this.dataSource = null;
@@ -105,19 +109,27 @@ export class FindTrainingComponent implements OnInit {
               return {
                 id : t.id,
                 name: t.skill.name,
-                trainingLv: t.trainingLevel,
+                trainingLvL: t.trainingLevel,
                 skillLvl: t.skill.skillLevel,
                 timeToExecute : t.timeToExecute,
               };
             })
           );
+          console.log(this.dataSource);
       });
   }
-
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  simulateTraining(trainingId: number) {
+    console.log(trainingId);
+    const userId = this.userService.getUserFromLocalStorage().id;
+    this.trainingService.simulateTraining(new SimulateTrainingEntity(trainingId, userId))
+    .subscribe(res => {
+      console.log(res);
+    });
   }
 
 }
