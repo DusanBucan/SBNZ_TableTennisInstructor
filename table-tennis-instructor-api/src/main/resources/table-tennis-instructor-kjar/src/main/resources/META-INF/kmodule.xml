@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+											  		
+	<kbase name="trainingPlanKb" packages="tti.trainingPlan">
+        <ksession name="trainingPlan"/>
+    </kbase>
+    
+    
+    <kbase name="cepTrainingMonitorKb" eventProcessingMode="stream" packages="tti.cepTrainingMonitor">
+        <ksession name="cepTrainingMonitor" clockType="pseudo"/>
+    </kbase>
+    
+    
+</kmodule>

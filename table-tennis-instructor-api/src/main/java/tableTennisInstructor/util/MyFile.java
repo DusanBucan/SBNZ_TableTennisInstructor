@@ -1,6 +1,7 @@
 package tableTennisInstructor.util;
 
 import org.springframework.web.multipart.MultipartFile;
+import tableTennisInstructor.constants.KieConstants;
 
 import java.io.*;
 import java.util.Date;
@@ -27,10 +28,10 @@ public class MyFile {
         return sb.toString();
     }
 
-    public static void writeToFile(MultipartFile file) throws Exception {
+    public static void writeToKjarFile(MultipartFile file) throws Exception {
         String fileStr = readFile(file);
         String fileName = "new_rules_" + new Date().toString();
-        try (PrintWriter out = new PrintWriter(basePath + fileName)) {
+        try (PrintWriter out = new PrintWriter(KieConstants.BASE_PATH_NEW_RULES + fileName + KieConstants.DRL_FILE_EXTENSION)) {
             out.println(fileStr);
         }
     }

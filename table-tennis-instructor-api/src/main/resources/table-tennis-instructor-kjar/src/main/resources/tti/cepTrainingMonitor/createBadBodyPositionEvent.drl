@@ -1,0 +1,41 @@
+//created on: May 4, 2020
+package cepTrainingMonitor
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.events.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+// ne radi lepo kad je Event vec procesiran.... npr i promasaj se desio pa ce pravila
+// za promasaj da vec isporcesiraju i onda se nece okinuti ovaj event
+// ... fora vise pravila obradjuje evente pa nece moci ovako jer bi trealo previse atributa
+//  ====> mozda moze da se dodaju Traits i onda svaka grupa pravila da gleda svoj Traits.....
+// 
+
+rule "Create event BadBodyPosition if there are 2 successive bad positions"
+    when
+    	$tre: TrainingExecution()
+    	$badBodyPos : ArrayList(size >= 2) from 
+    		accumulate (
+    			$s : SkillExecutionEvent(
+    						trainingExecutionId == $tre.id,
+    						rightBodyMovement == false,
+    						badBodyPositionProcessed == false
+    					)
+    				 over window:time(3s),
+    			init( ArrayList<SkillExecutionEvent> $l = new ArrayList<SkillExecutionEvent>();),
+    			action ( $l.add($s);),
+    			result($l)
+    		)
+    then
+    	for( Object $e: $badBodyPos) {
+    		((SkillExecutionEvent)$e).setBadBodyPositionProcessed(true);
+    		update($e);
+    	}
+    	insert(new BadBodyPositionEvent());
+    	System.out.println("Previse uzastopnih LOSIH POZICIJA TELA");
+end
+

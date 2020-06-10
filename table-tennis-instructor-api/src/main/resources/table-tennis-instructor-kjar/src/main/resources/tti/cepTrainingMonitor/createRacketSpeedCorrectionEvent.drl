@@ -1,0 +1,69 @@
+//created on: May 5, 2020
+package cepTrainingMonitor
+
+//list any import classes here.
+import tableTennisInstructor.model.drools.events.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import java.util.ArrayList;
+import java.lang.Long;
+
+
+rule "Create RacketSpeedCorrectionEvent with correction message when 2 or more badRacketSpeed with same speed occurs"
+	salience 100
+    when
+    	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
+    	//
+    	$e1: BadRacketSpeedEvent(processed == false, $speed: speed) over window:time(2s)
+        $similarEv: List(size >= 1) from
+        	accumulate($t: BadRacketSpeedEvent
+        					( 
+        					 (this != $e1) &&
+        					 ((speed > 0  && $speed > 0)|| (speed < 0  && $speed < 0 )) &&
+        					 (processed == false)
+        					)
+        			   over window:time(6s)
+        			  ,collectList($t))
+    then
+    	$e1.setProcessed(true);
+    	update($e1);
+    	for(Object $o: $similarEv) {
+    		 
+        	 BadRacketSpeedEvent $o1 = (BadRacketSpeedEvent) $o;
+        	 $o1.setProcessed(true);
+    		 update($o1);
+        }
+        System.out.println($similarEv);
+        RacketSpeedCorrectionEvent raketCorrectionEvent = new RacketSpeedCorrectionEvent();
+       	raketCorrectionEvent.setMessage($e1.speed > 0 ? "Laganije izvoditi pokret" : "Sporije izvoditi pokret");
+		insert(raketCorrectionEvent);
+        System.out.println("Kreiran event za korekciju brzine reketa");
+end
+
+
+rule "Create RacketSpeedCorrectionEvent with correction message when 2 or more badRacketSpeed with different speed occurs"
+	salience 90
+    when
+    	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
+    	//
+    	$e1: BadRacketSpeedEvent(processed == false) over window:time(2s)
+        $similarE: List(size >= 1) from
+        	accumulate($t: BadRacketSpeedEvent
+        					( 
+        					 (this != $e1),
+        					 processed == false
+        					)
+        			   over window:time(6s)
+        			  ,collectList($t))
+    then
+    	$e1.setProcessed(true);
+    	update($e1);
+    	for(Object $o: $similarE) {
+        	 BadRacketSpeedEvent $o1 = (BadRacketSpeedEvent) $o;
+        	 $o1.setProcessed(true);
+    		 update($o1);
+        }
+        RacketSpeedCorrectionEvent raketCorrectionEvent = new RacketSpeedCorrectionEvent();
+       	raketCorrectionEvent.setMessage("Brzina je bila i veca i manja od predvidjene, ustalite pokret");
+		insert(raketCorrectionEvent);
+        System.out.println("Kreiran event za korekciju brzine reketa bez saveta");
+end

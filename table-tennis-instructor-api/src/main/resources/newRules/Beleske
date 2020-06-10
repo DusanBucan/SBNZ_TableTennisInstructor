@@ -1,0 +1,5 @@
+aaa.drl fajl se koristi za demonstriranje kako admin moze da doda pravila u bazu znanja.
+
+--> pravila mogu da se dodaju samo za odabir treninga, u taj folder sa ostalim drl faklovima smesta
+pa kad pravi KieBase on samo iz tog foldera izvuce. nije problem da se namesti dodatna pravila i za cep..
+    samo da doda u ova foldera taj fajl..
