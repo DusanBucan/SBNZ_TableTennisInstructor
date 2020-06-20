@@ -18,24 +18,24 @@ import java.util.List;
 rule "Create event BadBodyPosition if there are 2 successive bad positions"
     when
     	$tre: TrainingExecution()
-    	$badBodyPos : ArrayList(size >= 2) from 
-    		accumulate (
-    			$s : SkillExecutionEvent(
+    	$badBodyPos1 :SkillExecutionEvent(
     						trainingExecutionId == $tre.id,
     						rightBodyMovement == false,
     						badBodyPositionProcessed == false
     					)
-    				 over window:time(3s),
-    			init( ArrayList<SkillExecutionEvent> $l = new ArrayList<SkillExecutionEvent>();),
-    			action ( $l.add($s);),
-    			result($l)
-    		)
+    	$badBodyPos2 :SkillExecutionEvent(
+            						trainingExecutionId == $tre.id,
+            						rightBodyMovement == false,
+            						badBodyPositionProcessed == false,
+            						$badBodyPos1 after [1s, 3s] this
+            					)
+
     then
-    	for( Object $e: $badBodyPos) {
-    		((SkillExecutionEvent)$e).setBadBodyPositionProcessed(true);
-    		update($e);
-    	}
-    	insert(new BadBodyPositionEvent());
+        $badBodyPos1.setBadBodyPositionProcessed(true);
+        $badBodyPos2.setBadBodyPositionProcessed(true);
+    	update($badBodyPos1);
+    	update($badBodyPos2);
+    	insert(new BadBodyPositionEvent($tre.id));
     	System.out.println("Previse uzastopnih LOSIH POZICIJA TELA");
 end
 

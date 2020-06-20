@@ -1,0 +1,16 @@
+package cepTrainingMonitor
+
+import tableTennisInstructor.model.drools.events.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+
+
+rule "createMissEvent when SkillExecutionEvent result is false"
+    when
+        $tre: TrainingExecution()
+        $a: SkillExecutionEvent(missProcessed==false && getResult()==false && trainingExecutionId == $tre.id)
+    then
+        MissEvent missEvent = new MissEvent($tre.id);
+        modify($a){setMissProcessed(true)}
+        insert(missEvent);
+        System.out.println("event promasaj se kreirao");
+end

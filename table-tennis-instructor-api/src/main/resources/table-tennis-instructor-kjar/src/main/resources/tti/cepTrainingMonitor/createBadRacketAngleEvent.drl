@@ -11,83 +11,59 @@ import java.lang.Long;
 //declare any global variables here
 
 
-rule "Create badRacketAngleEvent when training lvl iz BEGINER and 2 successive miss have "
+rule "Create badRacketAngleEvent when training lvl is BEGINER and deltaAngle is >=15 or <= -15"
 
     when
     	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
-    	$lastShot: List(size >= 1) from
-        	accumulate($t: SkillExecutionEvent(
-						trainingExecutionId == $tre.id, 
-        				(deltaAngle >= 15.0 || deltaAngle <= -15.0 ) &&
-        				badRacketAngleProcessed == false
-						)
-        			   over window:time(2s)
-        			  ,collectList($t))
-    then
-        for(Object $o: $lastShot) {
-        	 SkillExecutionEvent $o1 = (SkillExecutionEvent) $o;
-        	 $o1.setBadRacketAngleProcessed(true);
-        	 BadRacketAngleEvent badRaketEvent = new BadRacketAngleEvent();
-        	 badRaketEvent.setAngle($o1.deltaAngle);
-    		 update($o);
-        	 insert(badRaketEvent);
+    	$lastShot: SkillExecutionEvent(
+                   						trainingExecutionId == $tre.id,
+                           				(deltaAngle >= 15.0 || deltaAngle <= -15.0 ) &&
+                           				badRacketAngleProcessed == false
+                   						)
 
-			 System.out.println($o1.id);
-        	 System.out.println("Kreiran event los ugao reketa za pocetnicki nivo");
-        }
-        
+    then
+        $lastShot.setBadRacketAngleProcessed(true);
+        BadRacketAngleEvent badRaketEvent = new BadRacketAngleEvent($tre.id);
+        badRaketEvent.setAngle($lastShot.deltaAngle);
+        update($lastShot);
+        insert(badRaketEvent);
+        System.out.println("Kreiran event los ugao reketa za pocetnicki nivo");
+
 end
 
-rule "Create badRacketAngleEvent when training lvl iz INTERMEDIATE and 2 successive miss have "
+rule "Create badRacketAngleEvent when training lvl iz INTERMEDIATE and deltaAngle is >=10 or <= -10 "
 
     when
     	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
-    	$lastShot: List(size >= 1) from
-        	accumulate($t: 
-        				SkillExecutionEvent(trainingExecutionId == $tre.id, 
-        									(deltaAngle >= 10.0 || deltaAngle <= -10.0 ) &&
-        									badRacketAngleProcessed == false
-        									)
-        			   over window:time(2s)
-        			  ,collectList($t))
+    	$lastShot: SkillExecutionEvent(trainingExecutionId == $tre.id,
+        								(deltaAngle >= 10.0 || deltaAngle <= -10.0 ) &&
+        								badRacketAngleProcessed == false
+        						      )
     then
-        for(Object $o: $lastShot) {
-        	 SkillExecutionEvent $o1 = (SkillExecutionEvent) $o;
-        	 $o1.setBadRacketAngleProcessed(true);
-        	 BadRacketAngleEvent badRaketEvent = new BadRacketAngleEvent();
-        	 badRaketEvent.setAngle($o1.deltaAngle);
-    		 update($o);
-        	 insert(badRaketEvent);
-        	 System.out.println("Kreiran event los ugao reketa za INTERMEDIATE nivo");
-        }
-        
+         $lastShot.setBadRacketAngleProcessed(true);
+         BadRacketAngleEvent badRaketEvent = new BadRacketAngleEvent($tre.id);
+         badRaketEvent.setAngle($lastShot.deltaAngle);
+         update($lastShot);
+         insert(badRaketEvent);
+         System.out.println("Kreiran event los ugao reketa za INTERMEDIATE nivo");
+
 end
 
 
-rule "Create badRacketAngleEvent when training lvl iz ADVANCED and 2 successive miss have "
+rule "Create badRacketAngleEvent when training lvl iz ADVANCED and deltaAngle is >=5 or <= -5 "
 
     when
     	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
-    	$lastShot: List(size >= 1) from
-        	accumulate($t: 
-        				SkillExecutionEvent(trainingExecutionId == $tre.id, 
+    	$lastShot: SkillExecutionEvent(trainingExecutionId == $tre.id,
         									(deltaAngle >= 5.0 || deltaAngle <= -5.0 ) &&
         									badRacketAngleProcessed == false
         									)
-        			   over window:time(2s)
-        			  ,collectList($t))
     then
-        for(Object $o: $lastShot) {
-        	 SkillExecutionEvent $o1 = (SkillExecutionEvent) $o;
-        	 $o1.setBadRacketAngleProcessed(true);
-        	 BadRacketAngleEvent badRaketEvent = new BadRacketAngleEvent();
-        	 badRaketEvent.setAngle($o1.deltaAngle);
-    		 update($o);
-        	 insert(badRaketEvent);
-			 System.out.println(badRaketEvent.id);
-        	 System.out.println("Kreiran event los ugao reketa za ADVANCED nivo");
-        }
-        
+         modify($lastShot){setBadRacketAngleProcessed(true)}
+         BadRacketAngleEvent badRaketEvent = new BadRacketAngleEvent($tre.id);
+         badRaketEvent.setAngle($lastShot.deltaAngle);
+         insert(badRaketEvent);
+         System.out.println("Kreiran event los ugao reketa za ADVANCED nivo");
 end
 
 

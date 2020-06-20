@@ -1,6 +1,7 @@
 package tableTennisInstructor.model.drools.facts.training;
 
 
+import org.kie.api.definition.type.Timestamp;
 import tableTennisInstructor.model.User;
 
 import javax.persistence.*;
@@ -29,11 +30,16 @@ public class TrainingExecution {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "trainingMark")
     public TrainingMark trainingMark;
-    
+
+
     public TrainingExecution() {
     	trainingMark = TrainingMark.UNKNOWN;
     }
-    
+
+	public TrainingExecution(long time) {
+		trainingMark = TrainingMark.UNKNOWN;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -64,6 +70,5 @@ public class TrainingExecution {
 	public void setTrainingMark(TrainingMark trainingMark) {
 		this.trainingMark = trainingMark;
 	}
-    
-    
+
 }

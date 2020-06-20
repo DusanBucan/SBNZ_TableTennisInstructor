@@ -13,27 +13,20 @@ rule "Create RacketSpeedCorrectionEvent with correction message when 2 or more b
     when
     	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
     	//
-    	$e1: BadRacketSpeedEvent(processed == false, $speed: speed) over window:time(2s)
-        $similarEv: List(size >= 1) from
-        	accumulate($t: BadRacketSpeedEvent
-        					( 
+    	$e1: BadRacketSpeedEvent(processed == false, $speed: speed)
+        $e2:  BadRacketSpeedEvent(
         					 (this != $e1) &&
+        					 $e1.trainingExecutionId == trainingExecutionId &&
         					 ((speed > 0  && $speed > 0)|| (speed < 0  && $speed < 0 )) &&
-        					 (processed == false)
+        					 (processed == false),
+        					 $e1 before [0s, 6s] this
         					)
-        			   over window:time(6s)
-        			  ,collectList($t))
     then
     	$e1.setProcessed(true);
+    	$e2.setProcessed(true);
     	update($e1);
-    	for(Object $o: $similarEv) {
-    		 
-        	 BadRacketSpeedEvent $o1 = (BadRacketSpeedEvent) $o;
-        	 $o1.setProcessed(true);
-    		 update($o1);
-        }
-        System.out.println($similarEv);
-        RacketSpeedCorrectionEvent raketCorrectionEvent = new RacketSpeedCorrectionEvent();
+    	update($e2);
+        RacketSpeedCorrectionEvent raketCorrectionEvent = new RacketSpeedCorrectionEvent($e1.trainingExecutionId);
        	raketCorrectionEvent.setMessage($e1.speed > 0 ? "Laganije izvoditi pokret" : "Sporije izvoditi pokret");
 		insert(raketCorrectionEvent);
         System.out.println("Kreiran event za korekciju brzine reketa");
@@ -43,26 +36,20 @@ end
 rule "Create RacketSpeedCorrectionEvent with correction message when 2 or more badRacketSpeed with different speed occurs"
 	salience 90
     when
-    	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
-    	//
-    	$e1: BadRacketSpeedEvent(processed == false) over window:time(2s)
-        $similarE: List(size >= 1) from
-        	accumulate($t: BadRacketSpeedEvent
-        					( 
+    	$e1: BadRacketSpeedEvent(processed == false)
+        $e2: BadRacketSpeedEvent (
         					 (this != $e1),
-        					 processed == false
+        					 $e1.trainingExecutionId == trainingExecutionId &&
+        					 processed == false,
+        					 $e1 before [0s,6s] this
         					)
-        			   over window:time(6s)
-        			  ,collectList($t))
+
     then
     	$e1.setProcessed(true);
-    	update($e1);
-    	for(Object $o: $similarE) {
-        	 BadRacketSpeedEvent $o1 = (BadRacketSpeedEvent) $o;
-        	 $o1.setProcessed(true);
-    		 update($o1);
-        }
-        RacketSpeedCorrectionEvent raketCorrectionEvent = new RacketSpeedCorrectionEvent();
+        $e2.setProcessed(true);
+        update($e1);
+        update($e2);
+        RacketSpeedCorrectionEvent raketCorrectionEvent = new RacketSpeedCorrectionEvent($e1.trainingExecutionId);
        	raketCorrectionEvent.setMessage("Brzina je bila i veca i manja od predvidjene, ustalite pokret");
 		insert(raketCorrectionEvent);
         System.out.println("Kreiran event za korekciju brzine reketa bez saveta");

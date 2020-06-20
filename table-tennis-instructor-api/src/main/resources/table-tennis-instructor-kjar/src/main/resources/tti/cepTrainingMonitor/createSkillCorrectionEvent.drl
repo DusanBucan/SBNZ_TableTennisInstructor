@@ -12,48 +12,33 @@ import java.util.List;
 
 //declare any global variables here
 
-rule "Create Skill Correction Event when toMuchSuccessiveMissEvent is present"
-	salience 90
-    when
-    	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: ToMuchSuccessiveMiss(processed == false) over window:length(1),
-        					collectList($ta)
-        			) 
-    then
-    	insert(new SkillCorrectionEvent());
-    	ToMuchSuccessiveMiss $t1 = (ToMuchSuccessiveMiss) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja");
-end
+//rule "Create Skill Correction Event when toMuchSuccessiveMissEvent is present"
+//	salience 90
+//    when
+//    	$tre: TrainingExecution()
+//        $t: ToMuchSuccessiveMiss(processed == false && $tre.id == trainingId)
+//    then
+//    	$t.setProcessed(true);
+//		update($t);
+//		insert(new SkillCorrectionEvent());
+//		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja");
+//end
 
 
 rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketAngleCorrection are present"
 	salience 120
     when
     	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: ToMuchSuccessiveMiss(processed == false) over window:time(3s),
-        					collectList($ta)
-        			)
-        $bbE: List(size == 1) from
-        			 accumulate( 
-        					$ta: RacketAngleCorrectionEvent(processed == false) over window:time(6s),
-        					collectList($ta)
-        			) 
+        $toMuchSuccMiss: ToMuchSuccessiveMiss(processed == false, trainingId == $tre.id)
+        $racketAngleCorr: RacketAngleCorrectionEvent(
+                processed == false && trainigExecutionId == $tre.id &&
+                    ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
+
     then
-    	insert(new SkillCorrectionEvent());
-    	ToMuchSuccessiveMiss $t1 = (ToMuchSuccessiveMiss) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		
-		RacketAngleCorrectionEvent $bbE1 = (RacketAngleCorrectionEvent) $bbE.get(0);
-    	$bbE1.setProcessed(true);
-		update($bbE1);
-		
+        $toMuchSuccMiss.setProcessed(true);
+        update($toMuchSuccMiss);
+        modify($racketAngleCorr){setProcessed(true)}
+		insert(new SkillCorrectionEvent());
 		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i los ugao reketa");
 end
 
@@ -61,26 +46,16 @@ rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketSpe
 	salience 120
     when
     	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: ToMuchSuccessiveMiss(processed == false) over window:time(3s),
-        					collectList($ta)
-        			)
-        $bbE: List(size == 1) from
-        			 accumulate( 
-        					$ta: RacketSpeedCorrectionEvent(processed == false) over window:time(6s),
-        					collectList($ta)
-        			) 
+        $toMuchSuccMiss: ToMuchSuccessiveMiss(processed == false, trainingId == $tre.id)
+
+        $racketSpeedCorr: RacketSpeedCorrectionEvent(processed == false && trainigExecutionId == $tre.id &&
+                        ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
+
     then
-    	insert(new SkillCorrectionEvent());
-    	ToMuchSuccessiveMiss $t1 = (ToMuchSuccessiveMiss) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		
-		RacketSpeedCorrectionEvent $bbE1 = (RacketSpeedCorrectionEvent) $bbE.get(0);
-    	$bbE1.setProcessed(true);
-		update($bbE1);
-		
+    	$toMuchSuccMiss.setProcessed(true);
+        update($toMuchSuccMiss);
+        modify($racketSpeedCorr){setProcessed(true)}
+		insert(new SkillCorrectionEvent());
 		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i losa brzina reketa");
 end
 

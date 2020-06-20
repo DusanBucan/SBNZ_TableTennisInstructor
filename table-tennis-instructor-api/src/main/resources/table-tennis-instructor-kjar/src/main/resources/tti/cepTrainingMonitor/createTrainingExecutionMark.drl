@@ -24,6 +24,7 @@ rule "Create EXCELLENT mark when training is over and there are less then 6 Skil
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.EXCELLENT);}
     	System.out.println("Odlicna ocena za pocetnicki nivo");
+    	drools.halt();
 end
 
 rule "Create BAD mark when training is over and there are more then 7 SkillCorrectionEvent BEGINER Training"
@@ -40,6 +41,7 @@ rule "Create BAD mark when training is over and there are more then 7 SkillCorre
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
     	System.out.println("BAD ocena za pocetnicki nivo previse ispravki tehnike");
+    	drools.halt();
 end
 
 rule "Create BAD mark when training is over and there is toMuchMiss"
@@ -52,6 +54,7 @@ rule "Create BAD mark when training is over and there is toMuchMiss"
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
     	System.out.println("BAD ocena previse promasaja");
+    	drools.halt();
 end
 
 // GOOD OCENA ZA SVE NIVOE
@@ -65,6 +68,7 @@ rule "Create GOOD mark when training is over and there is no markSet for Trainin
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.GOOD);}
     	System.out.println("GOOD ocena ");
+    	drools.halt();
 end
 
 // ocene za INTERMEDIATE NIVO
@@ -84,6 +88,7 @@ rule "Create EXCELLENT mark when training is over and there are less then 4 Skil
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.EXCELLENT);}
     	System.out.println("Odlicna ocena za INTERMEDIATE nivo");
+    	drools.halt();
 end
 
 rule "Create BAD mark when training is over and there are more then 5 SkillCorrectionEvent INTERMEDIATE Training"
@@ -100,6 +105,7 @@ rule "Create BAD mark when training is over and there are more then 5 SkillCorre
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
     	System.out.println("BAD ocena za INTERMEDIATE nivo previse ispravki tehnike");
+    	drools.halt();
 end
 
 // ocene za ADVANCED NIVO
@@ -119,6 +125,7 @@ rule "Create EXCELLENT mark when training is over and there are less then 1 Skil
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.EXCELLENT);}
     	System.out.println("Odlicna ocena za ADVANCED nivo");
+    	drools.halt();
 end
 
 rule "Create BAD mark when training is over and there are more then 3 SkillCorrectionEvent ADVANCED Training"
@@ -135,4 +142,5 @@ rule "Create BAD mark when training is over and there are more then 3 SkillCorre
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
     	System.out.println("BAD ocena za ADVANCED nivo previse ispravki tehnike");
+    	drools.halt();
 end

@@ -67,6 +67,7 @@ rule "Create CreateMarkEvent when training is done and there are not critical nu
        	$endTr: EndTrainingEvent(processed == false)
        	
     then
-    	System.out.println("NEMA PREVISE PROMASAJA");
+    	modify ($endTr) {setProcessed(true);}
     	insert(new CreateMarkEvent());
+    	System.out.println("NEMA PREVISE PROMASAJA");
 end

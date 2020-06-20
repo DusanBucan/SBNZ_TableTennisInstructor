@@ -9,85 +9,47 @@ import java.util.List;
 import java.lang.Long;
 
 
-//TODO ima BUG koji nzm da resim.. 
-// Uzastopna 3 losa ugla ---> trebalo bi da prva 2 isprocesira i kreira Event za Korekciju
-// NE BI trebalo od 3. Event nista da pravi jer su predhodni isprocesirani..
-// on i od tog 3. pravi novi event KAKO TO RESITI
-
-// prebaci im processed na true ali ih opet gleda tj doda ih u listu
-// u poslednjih 6sek koji mogu da se koriste...
-// ISTO je i za brzinu reketa...
-
-// dobar broj pravila opali, nije vise 
-// atribut processed podesi kako treba na true...
-
-// atribut processed je vec na true i nzm sto ga onda filter uzme bas mi nije jasno...
-
-
 rule "Create RacketAngleCorrectionEvent with correction message when 2 or more badRacketAngles with same angle occurs"
 	salience 100
     when
     	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
     	//
-    	$e1: BadRacketAngleEvent(processed != true, $angle: angle) @watch(!processed) over window:time(2s)
-        $similarE: List(size >= 1) from
-        	accumulate($t: BadRacketAngleEvent
-        					( 
-        					 id != $e1.id &&
-        					 processed == false &&
-        					 ((angle > 0  && $angle > 0)|| (angle < 0  && $angle < 0 )) &&
-							  $e1 after[1s, 6s] this
-        					)
-        			   @watch(!processed) over window:time(6s)
-        			  ,collectList($t))
+    	$e1: BadRacketAngleEvent(processed == false, $angle: angle)
+        $e2: BadRacketAngleEvent(
+                                 id != $e1.id &&
+                                 processed == false &&
+                                 ((angle > 0  && $angle > 0)|| (angle < 0  && $angle < 0 )) &&
+                                 this after[0s, 3s] $e1
+        					    )
     then
-    	modify ($e1) {setProcessed(true);}
-		System.out.println($e1.id);
-		System.out.println($e1.processed);
-    	for(Object $o: $similarE) {	 
-			 BadRacketAngleEvent $o1 = (BadRacketAngleEvent) $o;
-        	 System.out.println($o1.id);
-			 System.out.println($o1.processed);
-			 modify ($o1) {setProcessed(true);}
-        }
-        //System.out.println($similarE);
-        RacketAngleCorrectionEvent raketCorrectionEvent = new RacketAngleCorrectionEvent();
+        $e1.setProcessed(true);
+        $e2.setProcessed(true);
+    	update($e1);
+    	update($e2);
+        RacketAngleCorrectionEvent raketCorrectionEvent = new RacketAngleCorrectionEvent($e1.trainingExecutionId);
        	raketCorrectionEvent.setMessage($e1.angle > 0 ? "Zatrovi reket" : "Otvori reket");
 		insert(raketCorrectionEvent);
-        System.out.println("Kreiran event za korekciju ugla reketa");
+        System.out.println("Kreiran event za KOREKCIJU UGLA reketa");
 
 end
 
 rule "Create RacketAngleCorrectionEvent without correction message when 2 or more badRacketAngles with different angle occurs"
 	salience 90
     when
-    	// uzmes tek kreirani event i pogledas 6 sek u proslos da li ima jos koji istog ugla
-    	//
-    	$e1: BadRacketAngleEvent(processed == false) @watch(!processed) over window:time(2s)
-        $similarE: List(size >= 1) from
-        	accumulate($t: BadRacketAngleEvent
-        					( 
-        					 (id != $e1.id) &&
-        					 processed == false &&
-							 $e1 after[1s, 6s] this
-        					)
-
-					@watch(!processed) over window:time(6s)
-        			  ,collectList($t))
+        $e1: BadRacketAngleEvent(processed == false, $angle: angle)
+        $e2: BadRacketAngleEvent(
+                  id != $e1.id &&
+                  processed == false &&
+                  ((angle > 0  && $angle < 0)|| (angle < 0  && $angle > 0 )) &&
+                  this after [0s, 3s] $e1
+                )
     then
-    	modify ($e1) {setProcessed(true);}
-		System.out.println($e1.id);
-		System.out.println($e1.processed);
-    	for(Object $o: $similarE) {
-        	 BadRacketAngleEvent $o1 = (BadRacketAngleEvent) $o;
-        	 modify ($o1) {setProcessed(true);}
-			 System.out.println($o1.id);
-			 System.out.println($o1.processed);
-        }
-        RacketAngleCorrectionEvent raketCorrectionEvent = new RacketAngleCorrectionEvent();
+        $e1.setProcessed(true);
+        $e2.setProcessed(true);
+        update($e1);
+        update($e2);
+        RacketAngleCorrectionEvent raketCorrectionEvent = new RacketAngleCorrectionEvent($e1.trainingExecutionId);
        	raketCorrectionEvent.setMessage("Nepravilan ugao reketa ali promenljiv");
 		insert(raketCorrectionEvent);
-        System.out.println("Kreiran event za korekciju ugla reketa bez poruke");
-		System.out.println($similarE.size());
-
+        System.out.println("Kreiran event za KOREKCIJU UGLA reketa bez poruke");
 end
