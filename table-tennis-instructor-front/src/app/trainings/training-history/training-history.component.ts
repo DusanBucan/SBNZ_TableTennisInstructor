@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material';
 export class TrainingHistoryComponent implements OnInit {
 
   trainingHistory: TrainingHistoryEntity[];
-  displayedColumns: string[] = ['id', 'skill', 'skillLvl', 'trainingLvl', 'trainingMark'];
+  displayedColumns: string[] = ['id', 'skill', 'skillLvl', 'trainingLvl', 'trainingMark', 'date'];
   dataSource;
 
   constructor(
@@ -42,7 +42,8 @@ export class TrainingHistoryComponent implements OnInit {
                   skillName: t.training.skill.name,
                   skillLvl: t.training.skill.skillLevel,
                   trainingLvl : t.training.trainingLevel,
-                  trainingMark: t.trainingMark
+                  trainingMark: t.trainingMark,
+                  date: t.date
                 };
               })
             );

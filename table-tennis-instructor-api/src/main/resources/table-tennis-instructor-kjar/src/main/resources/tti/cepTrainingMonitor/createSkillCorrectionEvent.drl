@@ -12,17 +12,25 @@ import java.util.List;
 
 //declare any global variables here
 
-//rule "Create Skill Correction Event when toMuchSuccessiveMissEvent is present"
-//	salience 90
-//    when
-//    	$tre: TrainingExecution()
-//        $t: ToMuchSuccessiveMiss(processed == false && $tre.id == trainingId)
-//    then
-//    	$t.setProcessed(true);
-//		update($t);
-//		insert(new SkillCorrectionEvent());
-//		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja");
-//end
+rule "Create Skill Correction Event when only toMuchSuccessiveMissEvent is present"
+	salience 90
+    when
+    	$tre: TrainingExecution()
+        $toMuchSuccMiss: ToMuchSuccessiveMiss(processed == false && $tre.id == trainingId)
+        not RacketAngleCorrectionEvent(processed == false && trainigExecutionId == $tre.id &&
+                ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
+
+        not RacketSpeedCorrectionEvent(processed == false && trainigExecutionId == $tre.id &&
+            ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
+
+        not BadBodyPositionEvent(processed == false && traininExecutionId == $tre.id &&
+            ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
+    then
+        modify($toMuchSuccMiss){setProcessed(true)}
+        SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $toMuchSuccMiss.message);
+        insert(correctionEvent);
+        System.out.println(correctionEvent.message);
+end
 
 
 rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketAngleCorrection are present"
@@ -35,11 +43,12 @@ rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketAng
                     ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
 
     then
-        $toMuchSuccMiss.setProcessed(true);
-        update($toMuchSuccMiss);
+        modify($toMuchSuccMiss){setProcessed(true)}
         modify($racketAngleCorr){setProcessed(true)}
-		insert(new SkillCorrectionEvent());
-		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i los ugao reketa");
+        String $message = $toMuchSuccMiss.getMessage() + " " + $racketAngleCorr.message;
+        SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $message);
+		insert(correctionEvent);
+		System.out.println(correctionEvent.message);
 end
 
 rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketSpeedCorrectionEvent are present"
@@ -52,38 +61,30 @@ rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and RacketSpe
                         ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
 
     then
-    	$toMuchSuccMiss.setProcessed(true);
-        update($toMuchSuccMiss);
+        modify($toMuchSuccMiss){setProcessed(true)}
         modify($racketSpeedCorr){setProcessed(true)}
-		insert(new SkillCorrectionEvent());
-		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i losa brzina reketa");
+        String $message = $toMuchSuccMiss.message + " " + $racketSpeedCorr.message;
+		SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $message);
+        insert(correctionEvent);
+        System.out.println(correctionEvent.message);
 end
 
 rule "Create Skill Correction Event when toMuchSuccessiveMissEvent and BadBodyPositionEvent are present"
 	salience 110
     when
     	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: ToMuchSuccessiveMiss(processed == false) over window:time(3s),
-        					collectList($ta)
-        			)
-        $bbE: List(size == 1) from
-        			 accumulate( 
-        					$ta: BadBodyPositionEvent(processed == false) over window:time(6s),
-        					collectList($ta)
-        			) 
+    	$toMuchSuccMiss: ToMuchSuccessiveMiss(processed == false, trainingId == $tre.id)
+        $badBodyPos: BadBodyPositionEvent(processed == false && traininExecutionId == $tre.id &&
+                                ( (this before[0s,2s] $toMuchSuccMiss) || (this after[0s,2s] $toMuchSuccMiss)))
+
     then
-    	insert(new SkillCorrectionEvent());
-    	ToMuchSuccessiveMiss $t1 = (ToMuchSuccessiveMiss) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		
-		BadBodyPositionEvent $bbE1 = (BadBodyPositionEvent) $bbE.get(0);
-    	$bbE1.setProcessed(true);
-		update($bbE1);
-		
-		System.out.println("potrebna korekcija jer ima previse uzastopnih promasaja i los je polozaj tela");
+        modify($toMuchSuccMiss){setProcessed(true)}
+        modify($badBodyPos){setProcessed(true)}
+        String $message = $toMuchSuccMiss.message + ", " + $badBodyPos.message;
+        SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $message);
+        insert(correctionEvent);
+        System.out.println(correctionEvent.message);
+
 end
 
 
@@ -91,83 +92,52 @@ rule "Create Skill Correction Event when RacketAngleCorrection and BadBodyPositi
 	salience 100
     when
     	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: RacketAngleCorrectionEvent(processed == false) over window:time(3s),
-        					collectList($ta)
-        			)
-        $bbE: List(size == 1) from
-        			 accumulate( 
-        					$ta: BadBodyPositionEvent(processed == false) over window:time(6s),
-        					collectList($ta)
-        			) 
+    	$badBodyPos: BadBodyPositionEvent(processed == false && traininExecutionId == $tre.id)
+        $racketAngleCorr: RacketAngleCorrectionEvent(
+                        processed == false && trainigExecutionId == $tre.id &&
+                            ( (this before[0s,5s] $badBodyPos) || (this after[0s,5s] $badBodyPos)))
     then
-    	insert(new SkillCorrectionEvent());
-    	RacketAngleCorrectionEvent $t1 = (RacketAngleCorrectionEvent) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		
-		BadBodyPositionEvent $bbE1 = (BadBodyPositionEvent) $bbE.get(0);
-    	$bbE1.setProcessed(true);
-		update($bbE1);
-		
-		System.out.println("potrebna korekcija jer je LosUgaoReketa i LosPolozajTela");
+    	modify($badBodyPos){setProcessed(true)}
+        modify($racketAngleCorr){setProcessed(true)}
+        String $message = $racketAngleCorr.message + " " + $badBodyPos.message;
+        SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $message);
+        insert(correctionEvent);
+        System.out.println(correctionEvent.message);
 end
 
 rule "Create Skill Correction Event when RacketSpeedCorrection and BadBodyPositionEvent are present"
 	salience 100
     when
     	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: RacketSpeedCorrectionEvent(processed == false) over window:time(3s),
-        					collectList($ta)
-        			)
-        $bbE: List(size == 1) from
-        			 accumulate( 
-        					$ta: BadBodyPositionEvent(processed == false) over window:time(6s),
-        					collectList($ta)
-        			) 
+    	$badBodyPos: BadBodyPositionEvent(processed == false && traininExecutionId == $tre.id)
+    	$racketSpeedCorr: RacketSpeedCorrectionEvent(processed == false && trainigExecutionId == $tre.id &&
+                                ( (this before[0s,2s] $badBodyPos) || (this after[0s,2s] $badBodyPos)))
     then
-    	insert(new SkillCorrectionEvent());
-    	RacketSpeedCorrectionEvent $t1 = (RacketSpeedCorrectionEvent) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		
-		BadBodyPositionEvent $bbE1 = (BadBodyPositionEvent) $bbE.get(0);
-    	$bbE1.setProcessed(true);
-		update($bbE1);
-		
-		System.out.println("potrebna korekcija jer je LosaBrzinaReketa i LosPolozajTela");
+    	modify($badBodyPos){setProcessed(true)}
+        modify($racketSpeedCorr){setProcessed(true)}
+        String $message = $racketSpeedCorr.message + " " + $badBodyPos.message;
+        SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $message);
+        insert(correctionEvent);
+        System.out.println(correctionEvent.message);
 end
 
-//TODO: ova pravila isto da li ce da prave BUG- kao kod brzina...
 
 rule "Create Skill Correction Event when RacketSpeedCorrection and RacketAngleCorrection are present"
 	salience 110
     when
     	$tre: TrainingExecution()
-        $t: List(size == 1) from
-        			 accumulate( 
-        					$ta: RacketSpeedCorrectionEvent(processed == false) over window:time(3s),
-        					collectList($ta)
-        			)
-        $bbE: List(size == 1) from
-        			 accumulate( 
-        					$ta: RacketAngleCorrectionEvent(processed == false) over window:time(3s),
-        					collectList($ta)
-        			) 
+    	$racketSpeedCorr: RacketSpeedCorrectionEvent(processed == false && trainigExecutionId == $tre.id)
+        $racketAngleCorr: RacketAngleCorrectionEvent(
+                                processed == false && trainigExecutionId == $tre.id &&
+                                    ( (this before[0s,5s] $racketSpeedCorr) || (this after[0s,5s] $racketSpeedCorr)))
+
     then
-    	insert(new SkillCorrectionEvent());
-    	RacketSpeedCorrectionEvent $t1 = (RacketSpeedCorrectionEvent) $t.get(0);
-    	$t1.setProcessed(true);
-		update($t1);
-		
-		RacketAngleCorrectionEvent $bbE1 = (RacketAngleCorrectionEvent) $bbE.get(0);
-    	$bbE1.setProcessed(true);
-		update($bbE1);
-		
-		System.out.println("potrebna korekcija jer je LosaBrzinaReketa i LosUgaoReketa");
+    	modify($racketAngleCorr){setProcessed(true)}
+        modify($racketSpeedCorr){setProcessed(true)}
+        String $message = $racketSpeedCorr.message + " " + $racketAngleCorr.message;
+        SkillCorrectionEvent correctionEvent = new SkillCorrectionEvent($tre.id, $message);
+        insert(correctionEvent);
+        System.out.println(correctionEvent.message);
 end
 
 

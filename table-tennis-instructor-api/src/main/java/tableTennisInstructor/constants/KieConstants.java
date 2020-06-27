@@ -12,4 +12,7 @@ public class KieConstants {
     public static String NEW_RELEASE_ID_VAR1 = "tableTennisInstructor.integration";
     public static String NEW_RELEASE_ID_VAR2 = "table-tennis-instructor-kjar";
     public static String NEW_RELEASE_ID_VAR3 = "0.0.1-SNAPSHOT";
+
+
+    // skillCorrectionMessages
 }

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import tableTennisInstructor.dto.request.SimulateTrainingDTO;
+import tableTennisInstructor.dto.response.TrainingExecutionDTO;
 import tableTennisInstructor.model.drools.events.SkillExecutionEvent;
 import tableTennisInstructor.model.drools.facts.training.TrainingExecution;
+import tableTennisInstructor.service.TrainingExecutionService;
 import tableTennisInstructor.service.TrainingMonitorService;
 
 import java.util.ArrayList;
@@ -23,14 +25,19 @@ public class TrainingMonitorController {
     @Autowired
     private TrainingMonitorService trainingMonitorService;
 
-    @RequestMapping(value = "/trainingSimulation", method = RequestMethod.POST)
+    @Autowired
+    private TrainingExecutionService trainingExecutionService;
+
+    @RequestMapping(value = "/trainingSimulation", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_REGULAR')")
-    public ResponseEntity<String> trainingSimulation(@RequestBody SimulateTrainingDTO simulateTrainingDTO) {
+    public ResponseEntity<TrainingExecutionDTO> trainingSimulation(@RequestBody SimulateTrainingDTO simulateTrainingDTO) {
 
         TrainingExecution startTrExecution = trainingMonitorService.prepareForSimulation(simulateTrainingDTO);
         ArrayList<SkillExecutionEvent> shots = trainingMonitorService.generateSkillExec(startTrExecution);
-        trainingMonitorService.simulateTraining(startTrExecution, shots);
-        return new ResponseEntity<>("Done", HttpStatus.OK);
+        TrainingExecution result = trainingMonitorService.simulateTraining(startTrExecution, shots);
+
+        trainingExecutionService.saveTrainingExecution(result);
+        return new ResponseEntity<>(new TrainingExecutionDTO(result), HttpStatus.OK);
     }
 
 

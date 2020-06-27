@@ -26,7 +26,8 @@ rule "Create event toMuchSuccessiveMiss if training level is BEGINER and there a
             ((MissEvent)$e).setProcessed(true);
             update($e);
         }
-    	insert(new ToMuchSuccessiveMiss($tre.id));
+    	ToMuchSuccessiveMiss toMuchSuccessiveMiss = new ToMuchSuccessiveMiss("Previse uzastopnih promasaja za BEGINER nivo", $tre.id);
+        insert(toMuchSuccessiveMiss);
     	System.out.println("Previse uzastopnih promasaja za pocetnicki nivo");
 end
 
@@ -45,7 +46,8 @@ rule "Create event toMuchSuccessiveMiss if training level is INTERMEDIATE and th
             ((MissEvent)$e).setProcessed(true);
             update($e);
         }
-    	insert(new ToMuchSuccessiveMiss($tre.id));
+        ToMuchSuccessiveMiss toMuchSuccessiveMiss = new ToMuchSuccessiveMiss("Previse uzastopnih promasaja za INTERMEDIATE nivo", $tre.id);
+        insert(toMuchSuccessiveMiss);
     	System.out.println("Previse uzastopnih promasaja za INTERMEDIATE nivo");
 end
 
@@ -64,6 +66,7 @@ rule "Create event toMuchSuccessiveMiss if training level is ADVANCED and there 
             ((MissEvent)$e).setProcessed(true);
             update($e);
         }
-    	insert(new ToMuchSuccessiveMiss($tre.id));
+        ToMuchSuccessiveMiss toMuchSuccessiveMiss = new ToMuchSuccessiveMiss("Previse uzastopnih promasaja za ADVANCED nivo", $tre.id);
+    	insert(toMuchSuccessiveMiss);
     	System.out.println("Previse uzastopnih promasaja za ADVANCED nivo");
 end

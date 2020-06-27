@@ -8,13 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-// ne radi lepo kad je Event vec procesiran.... npr i promasaj se desio pa ce pravila
-// za promasaj da vec isporcesiraju i onda se nece okinuti ovaj event
-// ... fora vise pravila obradjuje evente pa nece moci ovako jer bi trealo previse atributa
-//  ====> mozda moze da se dodaju Traits i onda svaka grupa pravila da gleda svoj Traits.....
-// 
-
 rule "Create event BadBodyPosition if there are 2 successive bad positions"
     when
     	$tre: TrainingExecution()

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import tableTennisInstructor.constants.Constants;
 import tableTennisInstructor.model.User;
@@ -81,8 +82,6 @@ public class TrainingPlanServiceIntegrationTest {
 
     @Test
     public void chooseBeginerTrainningPlanWhenNoTrainingHistory() {
-
-
         allSkills = util.mockAllBeginnerSkils();
         desiredSkill = allSkills.get(4);
 

@@ -8,17 +8,23 @@ import java.util.ArrayList;
 import java.lang.Long;
 
 
+// query koji proverava da li u memoriji postoji manje SkillCorrectionEvent-a od zadatog broja
+
+query isLessSkillCorrection(int cnt)
+	$found: Number(intValue < cnt) from accumulate(
+	       	$e: SkillCorrectionEvent(),
+	       	init(int total = 0;),
+	       	action( total += 1;),
+	       	result(total)
+	)
+end
+
 rule "Create EXCELLENT mark when training is over and there are less then 6 SkillCorrectionEvent and there is no toMuchMiss for BEGINER Training"
 	salience 100
     when
     	$endTr: CreateMarkEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
-       	$cntCorrectSkill: Number(intValue < 6) from accumulate(
-	       						$e: SkillCorrectionEvent(),
-	       						init(int total = 0;),
-	       						action( total += 1;),
-	       						result(total)
-       	) 
+       	isLessSkillCorrection(6;) 
        	not ToMuchMiss()
     then
     	modify ($endTr) {setProcessed(true);}
@@ -32,11 +38,7 @@ rule "Create BAD mark when training is over and there are more then 7 SkillCorre
     when
     	$endTr: CreateMarkEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
-       	$cntCorrectSkill: Number(intValue > 7) from accumulate(
-	       						$e: SkillCorrectionEvent(),
-	       						init(int total = 0;),
-	       						action( total += 1;),
-	       						result(total))
+		not isLessSkillCorrection(8;)
     then
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
@@ -77,12 +79,7 @@ rule "Create EXCELLENT mark when training is over and there are less then 4 Skil
     when
     	$endTr: CreateMarkEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
-       	$cntCorrectSkill: Number(intValue < 4) from accumulate(
-	       						$e: SkillCorrectionEvent(),
-	       						init(int total = 0;),
-	       						action( total += 1;),
-	       						result(total)
-       	) 
+		isLessSkillCorrection(4;)
        	not ToMuchMiss()
     then
     	modify ($endTr) {setProcessed(true);}
@@ -96,11 +93,7 @@ rule "Create BAD mark when training is over and there are more then 5 SkillCorre
     when
     	$endTr: CreateMarkEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
-       	$cntCorrectSkill: Number(intValue > 6) from accumulate(
-	       						$e: SkillCorrectionEvent(),
-	       						init(int total = 0;),
-	       						action( total += 1;),
-	       						result(total))
+		not isLessSkillCorrection(6;)
     then
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}
@@ -114,12 +107,7 @@ rule "Create EXCELLENT mark when training is over and there are less then 1 Skil
     when
     	$endTr: CreateMarkEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
-       	$cntCorrectSkill: Number(intValue < 1) from accumulate(
-	       						$e: SkillCorrectionEvent(),
-	       						init(int total = 0;),
-	       						action( total += 1;),
-	       						result(total)
-       	) 
+		isLessSkillCorrection(1;) 
        	not ToMuchMiss()
     then
     	modify ($endTr) {setProcessed(true);}
@@ -133,11 +121,7 @@ rule "Create BAD mark when training is over and there are more then 3 SkillCorre
     when
     	$endTr: CreateMarkEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
-       	$cntCorrectSkill: Number(intValue > 3) from accumulate(
-	       						$e: SkillCorrectionEvent(),
-	       						init(int total = 0;),
-	       						action( total += 1;),
-	       						result(total))
+		not isLessSkillCorrection(4;)
     then
     	modify ($endTr) {setProcessed(true);}
     	modify ($tre) {setTrainingMark(TrainingMark.BAD);}

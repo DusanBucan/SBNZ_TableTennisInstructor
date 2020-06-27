@@ -14,11 +14,13 @@ public class BadBodyPositionEvent implements Serializable {
     public Boolean processed = false;
     public Long traininExecutionId;
     public Date executionTime;
+    public String message;
 
     public BadBodyPositionEvent(Long traininExecutionId){
         this.processed = false;
         this.traininExecutionId = traininExecutionId;
         this.executionTime = new Date();
+        this.message = "UZASTUPNI LOSI POLOZAJI TELA";
     }
 
     public BadBodyPositionEvent() {

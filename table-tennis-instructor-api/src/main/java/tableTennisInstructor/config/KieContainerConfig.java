@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import tableTennisInstructor.constants.KieConstants;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 
 @Configuration
@@ -39,10 +40,15 @@ public class KieContainerConfig {
 
 
     public static void installKjar() throws MavenInvocationException {
+
+
         InvocationRequest request = new DefaultInvocationRequest();
         File f = new File(KieConstants.KJAR_POM_PATH );
         request.setPomFile(f);
-        request.setGoals(Collections.singletonList( "install" ));
+        ArrayList<String> commands = new ArrayList<>();
+        commands.add("install");
+        commands.add("clean");
+        request.setGoals(commands);
 
         Invoker invoker = new DefaultInvoker();
         // dok ne namestim M2_HOME da radi..

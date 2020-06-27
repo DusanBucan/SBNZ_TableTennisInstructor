@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface TrainingMonitorService {
 
-    void simulateTraining(TrainingExecution trainingExecution, ArrayList<SkillExecutionEvent> shots);
+    TrainingExecution simulateTraining(TrainingExecution trainingExecution, ArrayList<SkillExecutionEvent> shots);
     TrainingExecution prepareForSimulation(SimulateTrainingDTO simulateTrainingDTO);
     ArrayList<SkillExecutionEvent> generateSkillExec(TrainingExecution trainingExecution);
 }

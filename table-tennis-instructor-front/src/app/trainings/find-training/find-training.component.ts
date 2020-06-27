@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserHealthService } from 'src/app/services/user-health/user-health.service';
 import { UserService } from 'src/app/services/user-service/user.service';
 import { SimulateTrainingEntity } from 'src/app/models/training-simulate-requst-model/training-simulate-request.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-find-training',
@@ -36,7 +37,8 @@ export class FindTrainingComponent implements OnInit {
     private authService: AuthService,
     private skillService: SkillService,
     private userHealthService: UserHealthService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
   ) {
 
     this.dataSource = null;
@@ -129,6 +131,7 @@ export class FindTrainingComponent implements OnInit {
     this.trainingService.simulateTraining(new SimulateTrainingEntity(trainingId, userId))
     .subscribe(res => {
       console.log(res);
+      this.router.navigate(['trainingHistory']);
     });
   }
 

@@ -1,6 +1,7 @@
 package tableTennisInstructor.service;
 
 import tableTennisInstructor.model.User;
+import tableTennisInstructor.model.drools.events.SkillExecutionEvent;
 import tableTennisInstructor.model.drools.facts.UserHealth;
 import tableTennisInstructor.model.drools.facts.skill.Skill;
 import tableTennisInstructor.model.drools.facts.training.Training;
@@ -40,4 +41,19 @@ public interface Util {
     ArrayList<Training> prepareAllIntermediate();
     ArrayList<Training> prepareAllAdvanced();
     ArrayList<Training> prepareAllBeginer();
+
+
+    // mock functions for CEP
+    ArrayList<SkillExecutionEvent> makeMissSkil(int i, Long executionId);
+    ArrayList<SkillExecutionEvent> makeGoodShoots(int i, Long executionId);
+
+    TrainingExecution makeBegginerTrainingExecution();
+
+    ArrayList<SkillExecutionEvent> makeBadRacketAngleShots(int i, double angle, Long id, Boolean bodyPosition);
+
+    ArrayList<SkillExecutionEvent> makeBadRacketSpeedShots(int i, double deltaSpeed, Long id, Boolean bodyPosition);
+
+    TrainingExecution makeIntermediateTrainingExecution();
+
+    TrainingExecution makeAdvancedTrainingExecution();
 }

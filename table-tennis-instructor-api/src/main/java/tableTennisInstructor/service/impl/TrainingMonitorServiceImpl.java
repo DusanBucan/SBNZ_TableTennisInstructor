@@ -48,7 +48,7 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
     *
     * */
     @Override
-    public void simulateTraining(TrainingExecution trainingExecution, ArrayList<SkillExecutionEvent> shots) {
+    public TrainingExecution simulateTraining(TrainingExecution trainingExecution, ArrayList<SkillExecutionEvent> shots) {
         KieSession kieSession = kieSessionService.getKieSessionForSimulation();
 //        SessionPseudoClock clock = kieSession.getSessionClock();
 //        SessionClock clock = kieSession.getSessionClock();
@@ -83,75 +83,8 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
         }
         kieSession.fireUntilHalt();
 
-        // ispise ga u konzolu i update u bazi izvrsenje treninga nakon zavrsetka simulacije
-        // podesi koja je konacna odluka.
         System.out.println(trainingExecution.getTrainingMark());
-        trainingExecutionService.saveTrainingExecution(trainingExecution);
-
-
-
-
-//
-//
-//        System.out.println("pocetno vreme sata: " + clock.getCurrentTime());
-//
-//
-//
-//        for (int index = 0; index < shots.size(); index++) {
-//
-//
-//            SkillExecutionEvent e = shots.get(index);
-//            e.setExecutionTime(clock.getCurrentTime());
-//            kieSession.insert(e);
-//            clock.advanceTime(1, TimeUnit.SECONDS);
-//
-//            int ruleCount = kieSession.fireAllRules();
-//            System.out.println("index: " + index + " broj pravila " + ruleCount );
-//
-//
-//            ObjectFilter payPassFilter = new ObjectFilter() {
-//                @Override
-//                public boolean accept(Object object) {
-//                    if ( BadRacketSpeedEvent.class.equals(object.getClass())) return true;
-//                    if ( BadRacketSpeedEvent.class.equals(object.getClass().getSuperclass())) return true;
-//                    return false;
-//                }
-//            };
-//
-//            List<BadRacketSpeedEvent> facts = new ArrayList<>();
-//            for (FactHandle handle : kieSession.getFactHandles(payPassFilter)) {
-//                facts.add((BadRacketSpeedEvent) kieSession.getObject(handle));
-//            }
-//
-////            System.out.println("svi koji su trenutno u sesiji");
-////            System.out.println(facts);
-//
-//        }
-//
-//        ObjectFilter payPassFilter1 = new ObjectFilter() {
-//            @Override
-//            public boolean accept(Object object) {
-//                if ( RacketSpeedCorrectionEvent.class.equals(object.getClass())) return true;
-//                if ( RacketSpeedCorrectionEvent.class.equals(object.getClass().getSuperclass())) return true;
-//                return false;
-//            }
-//        };
-//
-//        List<RacketSpeedCorrectionEvent> facts = new ArrayList<>();
-//        for (FactHandle handle : kieSession.getFactHandles(payPassFilter1)) {
-//            facts.add((RacketSpeedCorrectionEvent) kieSession.getObject(handle));
-//        }
-
-
-
-
-
-        //We manually advance time 1 minute, without a heart beat
-//        clock.advanceTime(1, TimeUnit.MINUTES);
-//        int ruleCount = ksession.fireAllRules();
-//        assertThat(ruleCount, equalTo(1));
-//        Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(HeartAttackEvent.class));
-//        assertThat(newEvents.size(), equalTo(1));
+        return trainingExecution;
     }
 
     @Override
@@ -167,16 +100,16 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
         ArrayList<SkillExecutionEvent> retVal = new ArrayList<>();
 
         SkillExecutionEvent sk1 = new SkillExecutionEvent(1, false, true,
-                10.0, 0.0, trainingExecution.getId() );
+                0.0, 0.0, trainingExecution.getId() );
         retVal.add(sk1);
         SkillExecutionEvent sk2 = new SkillExecutionEvent(2, false, true,
-                10.0, 0.0, trainingExecution.getId() );
+                0.0, 0.0, trainingExecution.getId() );
         retVal.add(sk2);
 
-        SkillExecutionEvent sk3 = new SkillExecutionEvent(3, true, true,
+        SkillExecutionEvent sk3 = new SkillExecutionEvent(3, false, false,
                 0.0, 0.0, trainingExecution.getId() );
         retVal.add(sk3);
-        SkillExecutionEvent sk4 = new SkillExecutionEvent(4, true, true,
+        SkillExecutionEvent sk4 = new SkillExecutionEvent(4, false, false,
                 0.0, 0.0, trainingExecution.getId() );
         retVal.add(sk4);
         SkillExecutionEvent sk5 = new SkillExecutionEvent(5, true, true,

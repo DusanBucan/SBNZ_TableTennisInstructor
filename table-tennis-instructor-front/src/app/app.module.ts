@@ -12,18 +12,12 @@ import { MenuComponent } from './core/menu/menu.component';
 import { LoginComponent } from './core/login/login.component';
 import { RegisterComponent } from './core/register/register.component';
 import { ProfileComponent } from './core/profile/profile.component';
-import { AddEventComponent } from './core/add-event/add-event.component';
 
 import { UserService } from './services/user-service/user.service';
 import { LoginGuard } from './guards/login.service';
 import { RoleGuard } from './guards/role.service';
 import { AuthService } from './services/auth-service/auth.service';
-import { TicketService } from './services/ticket-service/ticket.service';
-import { EventService } from './services/event-service/event.service';
-import { HallService } from './services/hall-service/hall.service';
-import { PlaceService } from './services/place-service/place.service';
 import { DateFormatPipe } from './pipes/date-format.pipe';
-import { ReservationComponent } from './events/reservation/reservation.component';
 import { ListTrainingComponent } from './trainings/list-training/list-training.component';
 import { TrainingService } from './services/training-service/training.service';
 
@@ -53,9 +47,7 @@ import { RuleServiceService } from './services/rules-service/rule-service.servic
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    AddEventComponent,
     DateFormatPipe,
-    ReservationComponent,
     ListTrainingComponent,
     TrainingDetailsComponent,
     FindTrainingComponent,
@@ -79,12 +71,7 @@ import { RuleServiceService } from './services/rules-service/rule-service.servic
   ],
   providers: [
     UserService,
-    EventService,
     AuthService,
-    TicketService,
-    EventService,
-    HallService,
-    PlaceService,
     LoginGuard,
     RoleGuard,
     TrainingService,

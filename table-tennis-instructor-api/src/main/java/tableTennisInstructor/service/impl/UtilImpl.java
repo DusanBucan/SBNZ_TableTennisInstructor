@@ -2,6 +2,7 @@ package tableTennisInstructor.service.impl;
 
 import org.springframework.stereotype.Service;
 import tableTennisInstructor.model.User;
+import tableTennisInstructor.model.drools.events.SkillExecutionEvent;
 import tableTennisInstructor.model.drools.facts.UserHealth;
 import tableTennisInstructor.model.drools.facts.UserHealthState;
 import tableTennisInstructor.model.drools.facts.skill.Skill;
@@ -336,5 +337,87 @@ public class UtilImpl implements Util {
     @Override
     public ArrayList<TrainingExecution> preprareNoTrainingHistory() {
         return new ArrayList<>();
+    }
+
+
+
+    // CEP MOCK FUNCTION
+    @Override
+    public ArrayList<SkillExecutionEvent> makeMissSkil(int i, Long executionId) {
+        ArrayList<SkillExecutionEvent> retVal = new ArrayList<>();
+        for(int j=0; j< i; j++) {
+            SkillExecutionEvent e = new SkillExecutionEvent(1, false, true,
+                    0.0, 0.0, executionId);
+            retVal.add(e);
+        }
+        return retVal;
+    }
+
+    @Override
+    public ArrayList<SkillExecutionEvent> makeGoodShoots(int i, Long executionId) {
+        ArrayList<SkillExecutionEvent> retVal = new ArrayList<>();
+        for(int j=0; j< i; j++) {
+            SkillExecutionEvent e = new SkillExecutionEvent(1, true, true,
+                    0.0, 0.0, executionId);
+            retVal.add(e);
+        }
+        return retVal;
+    }
+
+    @Override
+    public TrainingExecution makeBegginerTrainingExecution() {
+        ArrayList<Skill> beginerSkills = mockAllBeginnerSkils();
+        Training training = preprareBeginerTraining(beginerSkills.get(0));
+        TrainingExecution trainingExecution = new TrainingExecution();
+        trainingExecution.setId(1l);
+        trainingExecution.setDate(new Date());
+        trainingExecution.setTraining(training);
+
+        return trainingExecution;
+    }
+
+    @Override
+    public TrainingExecution makeIntermediateTrainingExecution() {
+        ArrayList<Skill> beginerSkills = mockAllIntermediateSkills();
+        Training training = preprareIntermediateTraining(beginerSkills.get(0));
+        TrainingExecution trainingExecution = new TrainingExecution();
+        trainingExecution.setId(1l);
+        trainingExecution.setDate(new Date());
+        trainingExecution.setTraining(training);
+
+        return trainingExecution;
+    }
+
+    @Override
+    public TrainingExecution makeAdvancedTrainingExecution() {
+        ArrayList<Skill> beginerSkills = mockAllAdnvancedSkils();
+        Training training = preprareAdvancedTraining(beginerSkills.get(0));
+        TrainingExecution trainingExecution = new TrainingExecution();
+        trainingExecution.setId(1l);
+        trainingExecution.setDate(new Date());
+        trainingExecution.setTraining(training);
+        return trainingExecution;
+    }
+
+    @Override
+    public ArrayList<SkillExecutionEvent> makeBadRacketAngleShots(int i, double angle, Long id, Boolean bodyPosition) {
+        ArrayList<SkillExecutionEvent> retVal = new ArrayList<>();
+        for(int j=0; j< i; j++) {
+            SkillExecutionEvent e = new SkillExecutionEvent(1, true, bodyPosition,
+                    0.0, angle, id);
+            retVal.add(e);
+        }
+        return retVal;
+    }
+
+    @Override
+    public ArrayList<SkillExecutionEvent> makeBadRacketSpeedShots(int i, double deltaSpeed, Long id, Boolean bodyPosition) {
+        ArrayList<SkillExecutionEvent> retVal = new ArrayList<>();
+        for(int j=0; j< i; j++) {
+            SkillExecutionEvent e = new SkillExecutionEvent(1, true, bodyPosition,
+                    deltaSpeed, 0.0, id);
+            retVal.add(e);
+        }
+        return retVal;
     }
 }
