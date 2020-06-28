@@ -5,6 +5,8 @@ package trainingPlan
 import tableTennisInstructor.model.drools.facts.*;
 import tableTennisInstructor.model.drools.facts.training.*;
 
+import accumulate tableTennisInstructor.util.accumulateFunctions.PreviousSkillMarkFunction previousSkillMarkFun;
+
 rule "Set unknown previous skill mark if none training for this skill is dones"
     when
     	$trReq: TrainingChooseRequestFact($userId: userId, $trainHistory: trainHistory, $desiredSkill: desiredSkill)
@@ -36,25 +38,12 @@ rule "Set Bad previous skill mark if average skill mark is under 3"
  		not AverageMark(userId == $userId)
  
     	Number(doubleValue < 3.0) from accumulate (
-    	 						TrainingExecution(
+    	 						$treExc: TrainingExecution(
     	 							training.skill.skillId == $desiredSkill.skillId,
     	 							$trainingMark: trainingMark
     	 						)	 
     	 						from $trainHistory,
-    	 						init(int count = 0; int total = 0;),
-    	 						action(
-    	 								count += 1;
-    	 								total +=
-    	 									$trainingMark == TrainingMark.EXCELLENT ? 5 :
-    	 										$trainingMark == TrainingMark.GOOD ? 3: 1;
-    	 							),
-    	 						reverse(
-    	 							count -= 1;
-    	 							total -=
-    	 									$trainingMark == TrainingMark.EXCELLENT ? 5 :
-    	 										$trainingMark == TrainingMark.GOOD ? 3: 1;
-    	 							),
-    	 						result(total / count)
+								previousSkillMarkFun($treExc)
     	 					)
     then
     	System.out.println("dobio je losu prosecnu ocenu za ovaj skill");
@@ -72,25 +61,12 @@ rule "Set GOOD previous skill mark if average skill mark is between 3 and 4"
  		not AverageMark(userId == $userId)
  
     	Number(doubleValue >= 3.0 && doubleValue < 4.0) from accumulate (
-    	 						TrainingExecution(
+    	 						$treExc: TrainingExecution(
     	 							training.skill.skillId == $desiredSkill.skillId,
     	 							$trainingMark: trainingMark
     	 						)	 
     	 						from $trainHistory,
-    	 						init(int count = 0; int total = 0;),
-    	 						action(
-    	 								count += 1;
-    	 								total +=
-    	 									$trainingMark == TrainingMark.EXCELLENT ? 5 :
-    	 										$trainingMark == TrainingMark.GOOD ? 3: 1;
-    	 							),
-    	 						reverse(
-    	 							count -= 1;
-    	 							total -=
-    	 									$trainingMark == TrainingMark.EXCELLENT ? 5 :
-    	 										$trainingMark == TrainingMark.GOOD ? 3: 1;
-    	 							),
-    	 						result(total / count)
+								previousSkillMarkFun($treExc)
     	 					)
     then
     	System.out.println("dobio je GOOD prosecnu ocenu za ovaj skill ");
@@ -108,25 +84,12 @@ rule "Set EXCELLENT previous skill mark if average skill mark is between 3 and 4
  		not AverageMark(userId == $userId)
  
     	Number(doubleValue >= 4.0) from accumulate (
-    	 						TrainingExecution(
+    	 						$treExc: TrainingExecution(
     	 							training.skill.skillId == $desiredSkill.skillId,
     	 							$trainingMark: trainingMark
     	 						)	 
     	 						from $trainHistory,
-    	 						init(int count = 0; int total = 0;),
-    	 						action(
-    	 								count += 1;
-    	 								total +=
-    	 									$trainingMark == TrainingMark.EXCELLENT ? 5 :
-    	 										$trainingMark == TrainingMark.GOOD ? 3: 1;
-    	 							),
-    	 						reverse(
-    	 							count -= 1;
-    	 							total -=
-    	 									$trainingMark == TrainingMark.EXCELLENT ? 5 :
-    	 										$trainingMark == TrainingMark.GOOD ? 3: 1;
-    	 							),
-    	 						result(total / count)
+								previousSkillMarkFun($treExc)
     	 					)
     then
     	System.out.println("dobio je EXCELENT prosecnu ocenu za ovaj skill");

@@ -70,7 +70,7 @@ public class TrainingMonitorServiceIntegrationTest {
     * */
 
     @Test
-//    @Ignore
+    @Ignore
     public void makeBadMark_When_ToMuchSkillCorrections_Begginer_level() {
 
         TrainingExecution beginerTrainingExecution = util.makeBegginerTrainingExecution();
@@ -112,7 +112,7 @@ public class TrainingMonitorServiceIntegrationTest {
 
 
     @Test
-//    @Ignore
+    @Ignore
     public void makeGoodMark_When_Begginer_level() {
         TrainingExecution beginerTrainingExecution = util.makeBegginerTrainingExecution();
         ArrayList<SkillExecutionEvent> executions = util.makeGoodShoots(2, beginerTrainingExecution.getId());
@@ -141,7 +141,7 @@ public class TrainingMonitorServiceIntegrationTest {
     *   -- u test su izmedju uspesnih izvodjenja dodata i losa izvodjenja kako bi scenario bio realniji
     * */
     @Test
-//    @Ignore
+    @Ignore
     public void makeExcelentMark_When_Begginer_level() {
 
         TrainingExecution beginerTrainingExecution = util.makeBegginerTrainingExecution();
@@ -188,7 +188,7 @@ public class TrainingMonitorServiceIntegrationTest {
     *   -- u test bi trebalo da se kreira 6 eventa SkillCorrection, pa bi konacna ocena trebala da bude BAD.
     * */
     @Test
-//    @Ignore
+    @Ignore
     public void makeBadMark_When_ToMuchSkillCorrections_Intermediate_level() {
         TrainingExecution trainingExecution = util.makeIntermediateTrainingExecution();
         ArrayList<SkillExecutionEvent> executions = util.makeGoodShoots(2, trainingExecution.getId());
@@ -213,7 +213,7 @@ public class TrainingMonitorServiceIntegrationTest {
     *
     * */
     @Test
-//    @Ignore
+    @Ignore
     public void makeExcelentMark_When_Intermediate_level() {
         TrainingExecution trainingExecution = util.makeIntermediateTrainingExecution();
         ArrayList<SkillExecutionEvent> executions = util.makeGoodShoots(2, trainingExecution.getId());
@@ -247,7 +247,7 @@ public class TrainingMonitorServiceIntegrationTest {
     *
     * */
     @Test
-//    @Ignore
+    @Ignore
     public void makeBadMark_When_ToMuchSkillCorrections_Advance_level() {
         TrainingExecution trainingExecution = util.makeAdvancedTrainingExecution();
         Long trainingExecutionId = trainingExecution.getId();
@@ -266,7 +266,7 @@ public class TrainingMonitorServiceIntegrationTest {
     *   pa ne moze dobiti EXCELENT ocenu, a nije za BAD ocenu.
     *  */
     @Test
-//    @Ignore
+    @Ignore
     public void makeGoodMark_When_Advance_level() {
         TrainingExecution trainingExecution = util.makeAdvancedTrainingExecution();
         Long trainingExecutionId = trainingExecution.getId();
@@ -281,7 +281,7 @@ public class TrainingMonitorServiceIntegrationTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void makeExcellentMark_When_Advance_level() {
         TrainingExecution trainingExecution = util.makeAdvancedTrainingExecution();
         Long trainingExecutionId = trainingExecution.getId();

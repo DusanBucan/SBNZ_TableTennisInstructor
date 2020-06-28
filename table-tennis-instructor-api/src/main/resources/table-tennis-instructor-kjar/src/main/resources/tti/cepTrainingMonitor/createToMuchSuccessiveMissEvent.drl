@@ -11,18 +11,20 @@ import java.lang.Long;
 //declare any global variables here
 
 
+
+
 rule "Create event toMuchSuccessiveMiss if training level is BEGINER and there are 5 successive miss"
     when
     	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
-        $lastTreeSecondsMiss: List(size >= 5) from
-                	accumulate($t:
-                				MissEvent(trainingExecutionId == $tre.id,
-                						  processed == false
-                						 )
-                			   over window:time(6s)
-                			  ,collectList($t))
+        $lastSixSecondsMiss: List(size >= 5) from
+                                    accumulate($t:
+                                        MissEvent(trainingExecutionId == $tre.id,
+                                                processed == false
+                                        )
+                                over window:time(6s)
+                                ,collectList($t))
     then
-        for( Object $e: $lastTreeSecondsMiss) {
+        for( Object $e: $lastSixSecondsMiss) {
             ((MissEvent)$e).setProcessed(true);
             update($e);
         }

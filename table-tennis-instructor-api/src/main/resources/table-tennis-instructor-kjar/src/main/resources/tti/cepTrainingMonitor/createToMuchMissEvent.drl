@@ -7,18 +7,23 @@ import tableTennisInstructor.model.drools.facts.training.*;
 import java.util.ArrayList;
 import java.lang.Long;
 
+import accumulate tableTennisInstructor.util.accumulateFunctions.TooMuchMissFunction tooMuchMissAcc;
+
+
+query isMoreThen(double missBound)
+	$total: Number(doubleValue >= missBound) from accumulate(
+       				$e:SkillExecutionEvent(),
+					tooMuchMissAcc($e)
+       		) 
+end 
+
 
 rule "Create TuMuchMissEvent when BEGINER training is done and there are more then 40% of miss"
 	salience 100
     when
        	$endTr: EndTrainingEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.BEGINNER)
-       	$total: Number(doubleValue >= 0.4) from accumulate(
-       				$e:SkillExecutionEvent(),
-       				init(double total = 0; double missed = 0;),
-       				action( total += 1; missed += $e.result ? 0:1;),
-       				result(missed/total)
-       	) 
+       	isMoreThen(0.4;)
     then
     	System.out.println("previse promasaja za pocetnicki nivo");
     	modify ($endTr) {setProcessed(true);}
@@ -31,12 +36,7 @@ rule "Create TuMuchMissEvent when INTERMEDIATE training is done and there are mo
     when
        	$endTr: EndTrainingEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.INTERMEDIATE)
-       	$total: Number(doubleValue >= 0.35) from accumulate(
-       				$e:SkillExecutionEvent(),
-       				init(double total = 0; double missed = 0;),
-       				action( total += 1; missed += $e.result ? 0:1;),
-       				result(missed/total)
-       	) 
+		isMoreThen(0.35;)
     then
     	modify ($endTr) {setProcessed(true);}
     	insert(new ToMuchMiss());
@@ -49,12 +49,7 @@ rule "Create TuMuchMissEvent when ADVANCED training is done and there are more t
     when
        	$endTr: EndTrainingEvent(processed == false)
        	$tre: TrainingExecution(training.trainingLevel == TrainingLevel.ADVANCED)
-       	$total: Number(doubleValue >= 0.25) from accumulate(
-       				$e:SkillExecutionEvent(),
-       				init(double total = 0; double missed = 0;),
-       				action( total += 1; missed += $e.result ? 0:1;),
-       				result(missed/total)
-       	) 
+		isMoreThen(0.25;)
     then
     	modify ($endTr) {setProcessed(true);}
     	insert(new ToMuchMiss());
