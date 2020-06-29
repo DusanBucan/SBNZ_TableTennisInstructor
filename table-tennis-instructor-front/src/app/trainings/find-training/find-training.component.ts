@@ -20,6 +20,9 @@ import { Router } from '@angular/router';
 })
 export class FindTrainingComponent implements OnInit {
 
+
+  file: File;
+
   findTraining;
   submitted;
   trainingSearch: TrainingSearchEntity;
@@ -133,6 +136,18 @@ export class FindTrainingComponent implements OnInit {
       console.log(res);
       this.router.navigate(['trainingHistory']);
     });
+  }
+
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
+  }
+
+  onUpload(trainingId: number) {
+    this.trainingService.uploadTrainingData(trainingId, this.file).subscribe(
+      res => {
+        console.log(res);
+        this.router.navigate(['trainingHistory']);
+      });
   }
 
 }

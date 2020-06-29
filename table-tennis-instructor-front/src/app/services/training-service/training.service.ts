@@ -44,6 +44,14 @@ export class TrainingService {
     return this.http.post(this.monitorTrainingUrl + '/trainingSimulation', data);
   }
 
+  uploadTrainingData(trainingId: number, trainingData: File) {
+    const fd = new FormData();
+    fd.append('file', trainingData);
+    return this.http.post(this.monitorTrainingUrl + '/processTrainingData/' + trainingId,
+      fd
+    );
+  }
+
   add(training: TrainingEntity) {
     return this.http.post(this.url, training);
   }

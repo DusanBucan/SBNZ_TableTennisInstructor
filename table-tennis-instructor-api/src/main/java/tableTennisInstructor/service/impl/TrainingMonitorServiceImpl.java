@@ -10,6 +10,7 @@ import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.time.SessionClock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tableTennisInstructor.dto.request.SimulateTrainingDTO;
 import tableTennisInstructor.model.User;
 import tableTennisInstructor.model.drools.events.*;
@@ -18,8 +19,10 @@ import tableTennisInstructor.model.drools.facts.training.TrainingChooseFact;
 import tableTennisInstructor.model.drools.facts.training.TrainingExecution;
 import tableTennisInstructor.model.drools.facts.training.TrainingLevel;
 import tableTennisInstructor.service.*;
+import tableTennisInstructor.util.MyFile;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -88,12 +91,30 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
     }
 
     @Override
+    public TrainingExecution processTrainingData(TrainingExecution trainingExecution, MultipartFile q) throws Exception{
+        ArrayList<SkillExecutionEvent> skillExecutionEvents = MyFile.readSkilleExecutionsFromJsonFile(q);
+        for(SkillExecutionEvent sk: skillExecutionEvents) {
+            sk.setTrainingExecutionId(trainingExecution.getId());
+        }
+        return simulateTraining(trainingExecution, skillExecutionEvents);
+    }
+
+    @Override
     public TrainingExecution prepareForSimulation(SimulateTrainingDTO simulateTrainingDTO) {
         User user = userService.getById(simulateTrainingDTO.getUserId());
         Training training = trainingService.getById(simulateTrainingDTO.getTrainingId().toString());
         TrainingExecution trainingExecution = trainingExecutionService.startTraining(training, user);
         return trainingExecution;
     }
+
+    @Override
+    public TrainingExecution prepareForSimulation(Principal principal, Long trainingId) {
+        User user = userService.getByUsername(principal.getName());
+        Training training = trainingService.getById(trainingId.toString());
+        TrainingExecution trainingExecution = trainingExecutionService.startTraining(training, user);
+        return trainingExecution;
+    }
+
 
     @Override
     public ArrayList<SkillExecutionEvent> generateSkillExec(TrainingExecution trainingExecution) {
