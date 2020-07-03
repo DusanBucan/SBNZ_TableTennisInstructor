@@ -4,6 +4,8 @@ import { UserService } from 'src/app/services/user-service/user.service';
 import {TrainingHistoryEntity} from 'src/app/models/training-history-model/training-history.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material';
+import { TrainingHistorySearchEntity } from 'src/app/models/training-history-search-model/training.history.search.model';
+import { TrainingMarkType } from 'src/app/models/training-history-model/training.mark.enum';
 
 @Component({
   selector: 'app-training-history',
@@ -15,6 +17,8 @@ export class TrainingHistoryComponent implements OnInit {
   trainingHistory: TrainingHistoryEntity[];
   displayedColumns: string[] = ['id', 'skill', 'skillLvl', 'trainingLvl', 'trainingMark', 'date'];
   dataSource;
+
+  trainingSearchParams: TrainingHistorySearchEntity;
 
   constructor(
     private trainingService: TrainingService,
@@ -30,8 +34,11 @@ export class TrainingHistoryComponent implements OnInit {
 
 
   ngOnInit() {
-      this.trainingService.getTrainingHistotyByUserId(
-          this.userService.getUserFromLocalStorage().id)
+      const userId = this.userService.getUserFromLocalStorage().id;
+      this.trainingSearchParams =
+        new TrainingHistorySearchEntity(userId, -1, TrainingMarkType.UNKNOWN, -1);
+
+      this.trainingService.getTrainingHistotyByUserId(this.trainingSearchParams)
             .subscribe(
           (data: TrainingHistoryEntity[]) => {
             this.trainingHistory = data;

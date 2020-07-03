@@ -1,13 +1,16 @@
 package tableTennisInstructor.service.impl;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tableTennisInstructor.dto.request.TrainingHistorySearchDTO;
 import tableTennisInstructor.exception.exceptions.ApiRequestException;
 import tableTennisInstructor.model.User;
 import tableTennisInstructor.model.drools.facts.training.Training;
 import tableTennisInstructor.model.drools.facts.training.TrainingExecution;
 import tableTennisInstructor.model.drools.facts.training.TrainingMark;
 import tableTennisInstructor.repository.TrainingExecutionRepository;
+import tableTennisInstructor.service.KieSessionService;
 import tableTennisInstructor.service.TrainingExecutionService;
 
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.Date;
 
 @Service
 public class TrainingExecutionServiceImpl implements TrainingExecutionService {
+
 
     @Autowired
     private TrainingExecutionRepository trainingExecutionRepository;

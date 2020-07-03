@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { TrainingSearchEntity } from 'src/app/models/training-search-model/training-search.model';
 import { TrainingEntity } from 'src/app/models/training-model/training.model';
 import { SimulateTrainingEntity } from 'src/app/models/training-simulate-requst-model/training-simulate-request.model';
+import { TrainingHistorySearchEntity } from 'src/app/models/training-history-search-model/training.history.search.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class TrainingService {
   private url: string;
   private findPlanUrl: string;
   private monitorTrainingUrl: string;
+  private trainigReportsUrl: string;
 
   constructor(
     private http: HttpClient,
@@ -22,6 +24,7 @@ export class TrainingService {
     this.url = environment.restPath + '/training';
     this.findPlanUrl = environment.restPath + '/trainingChoose';
     this.monitorTrainingUrl = environment.restPath + '/trainingMonitor';
+    this.trainigReportsUrl = environment.restPath + '/trainingReports';
   }
 
   getAll() {
@@ -32,8 +35,8 @@ export class TrainingService {
     return this.http.get(this.url + '/getDetails/' + id);
   }
 
-  getTrainingHistotyByUserId(id: number) {
-    return this.http.get(this.url + '/getTrainingHistory/' + id);
+  getTrainingHistotyByUserId(data: TrainingHistorySearchEntity) {
+    return this.http.post(this.trainigReportsUrl + '/getTrainingHistory', data);
   }
 
   findTrainingPlan(userData: TrainingSearchEntity) {

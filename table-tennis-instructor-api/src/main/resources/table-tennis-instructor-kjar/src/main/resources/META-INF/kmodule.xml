@@ -5,8 +5,11 @@
 	<kbase name="trainingPlanKb" packages="tti.trainingPlan">
         <ksession name="trainingPlan"/>
     </kbase>
-    
-    
+
+    <kbase name="trainingReportsKb" packages="tti.reports">
+        <ksession name="trainingExecutionReports"/>
+    </kbase>
+
     <kbase name="cepTrainingMonitorKb" eventProcessingMode="stream" packages="tti.cepTrainingMonitor">
         <ksession name="cepTrainingMonitor" clockType="realtime"/>
     </kbase>

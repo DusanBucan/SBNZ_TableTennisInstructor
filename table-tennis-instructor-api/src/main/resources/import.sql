@@ -151,4 +151,4 @@ INSERT INTO `training_drill_join` (training_id, drill_id)  VALUES (10,3)
 
 -- dosadasnji treninzi korisnika`
 INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (2, 1, 9, null, 'EXCELLENT');
-INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (1, 1, 8, null, 'EXCELLENT');
+INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (1, 1, 2, null, 'EXCELLENT');

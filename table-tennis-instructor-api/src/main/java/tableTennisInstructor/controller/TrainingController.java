@@ -21,9 +21,6 @@ public class TrainingController {
     @Autowired
     private TrainingService trainingService;
 
-    @Autowired
-    private TrainingExecutionService trainingExecutionService;
-
     @GetMapping(path = "getAll")
     public ResponseEntity<ArrayList<Training>> getAll() {
         return new ResponseEntity<>(trainingService.getAll(), HttpStatus.OK);
@@ -34,13 +31,6 @@ public class TrainingController {
         return new ResponseEntity<>(trainingService.getById(id), HttpStatus.OK);
     }
 
-    @GetMapping(path = "getTrainingHistory/{id}")
-    public ResponseEntity<ArrayList<TrainingExecutionDTO>> getTrainingHistory(@PathVariable Long id) {
-        ArrayList<TrainingExecutionDTO> trainingExecutions = (ArrayList<TrainingExecutionDTO>)
-                trainingExecutionService.findByUserId(id)
-                    .stream().map(tre -> new TrainingExecutionDTO(tre)).collect(Collectors.toList());
-        return new ResponseEntity<>(trainingExecutions, HttpStatus.OK);
-    }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Training> add(@RequestBody Training training) {

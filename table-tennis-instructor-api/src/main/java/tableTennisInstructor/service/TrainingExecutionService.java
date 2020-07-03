@@ -1,5 +1,6 @@
 package tableTennisInstructor.service;
 
+import tableTennisInstructor.dto.request.TrainingHistorySearchDTO;
 import tableTennisInstructor.model.User;
 import tableTennisInstructor.model.drools.facts.training.Training;
 import tableTennisInstructor.model.drools.facts.training.TrainingExecution;
