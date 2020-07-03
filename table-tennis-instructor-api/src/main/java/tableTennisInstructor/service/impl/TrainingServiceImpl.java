@@ -39,8 +39,11 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public Training getById(String id)
     {
-        return this.trainingRepository.findById(Long.parseLong(id))
+        Training tr =this.trainingRepository.findById(Long.parseLong(id))
                 .orElseThrow(()-> new ApiRequestException("training with doesn't exists with id: " + id ));
+        tr.getMostCommonMistakes();
+        tr.getDrills();
+        return tr;
     }
 
     @Override

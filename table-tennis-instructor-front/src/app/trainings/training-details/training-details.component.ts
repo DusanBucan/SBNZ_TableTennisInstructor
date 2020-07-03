@@ -36,9 +36,4 @@ export class TrainingDetailsComponent implements OnInit {
       }
     }
 
-  startTraining() {
-    console.log('begin simulation');
-  }
-
-
 }

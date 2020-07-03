@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import tableTennisInstructor.service.AddRuleService;
 import tableTennisInstructor.util.MyFile;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping(value = "/api/rules", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AddRuleController {
@@ -19,8 +21,8 @@ public class AddRuleController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Void> addSkill(@RequestParam(("file")) MultipartFile q) throws Exception {
-        addRuleService.addRuleService(q);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<ArrayList<String>> addSkill(@RequestParam(("file")) MultipartFile q) throws Exception {
+        ArrayList<String> errors = addRuleService.addRuleService(q);
+        return new ResponseEntity<>(errors, HttpStatus.OK);
     }
 }

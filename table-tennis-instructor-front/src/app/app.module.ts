@@ -37,7 +37,7 @@ import { MatDialogModule, MatListModule } from '@angular/material';
 import { AddRuleComponent } from './rules/add-rule/add-rule.component';
 import { RuleServiceService } from './services/rules-service/rule-service.service';
 
-
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,8 @@ import { RuleServiceService } from './services/rules-service/rule-service.servic
     MaterialModule,
     HttpClientModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     UserService,

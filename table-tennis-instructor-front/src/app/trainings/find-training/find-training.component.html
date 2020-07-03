@@ -28,7 +28,12 @@
         <button class="button" type="submit">Find</button>
     </form>
 
-    <div *ngIf="dataSource">
+    <div *ngIf="dataSource && trainings.length < 1">
+        NO SEARCH RESULTS
+    </div>
+
+
+    <div *ngIf="dataSource && trainings.length >= 1">
         <mat-form-field>
             <mat-label>Filter</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">

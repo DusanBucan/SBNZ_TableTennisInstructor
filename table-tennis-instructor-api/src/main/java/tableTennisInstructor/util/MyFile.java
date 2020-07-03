@@ -64,11 +64,10 @@ public class MyFile {
         return sb.toString();
     }
 
-    public static void writeToKjarFile(MultipartFile file) throws Exception {
-        String fileStr = readFile(file);
+    public static void writeToKjarFile(String drl) throws Exception {
         String fileName = "new_rules_" + new Date().toString();
         try (PrintWriter out = new PrintWriter(KieConstants.BASE_PATH_NEW_RULES + fileName + KieConstants.DRL_FILE_EXTENSION)) {
-            out.println(fileStr);
+            out.println(drl);
         }
     }
 }

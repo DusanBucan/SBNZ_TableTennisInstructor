@@ -1,19 +1,21 @@
 package tableTennisInstructor.config;
 
 import org.apache.maven.shared.invoker.*;
-import org.kie.api.KieBase;
-import org.kie.api.KieBaseConfiguration;
+import org.drools.core.io.impl.ReaderResource;
+import org.drools.verifier.Verifier;
+import org.drools.verifier.builder.VerifierBuilder;
+import org.drools.verifier.builder.VerifierBuilderFactory;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
-import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tableTennisInstructor.constants.KieConstants;
 
 import java.io.File;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Configuration
 public class KieContainerConfig {
@@ -40,8 +42,6 @@ public class KieContainerConfig {
 
 
     public static void installKjar() throws MavenInvocationException {
-
-
         InvocationRequest request = new DefaultInvocationRequest();
         File f = new File(KieConstants.KJAR_POM_PATH );
         request.setPomFile(f);
@@ -58,6 +58,19 @@ public class KieContainerConfig {
             System.out.println(result.getExecutionException().toString());
             System.out.println(result.getExitCode());
         }
+    }
+
+    public static ArrayList<String> verifyDRLFile(String drl) {
+        ArrayList<String> errors = new ArrayList<>();
+        VerifierBuilder vBuilder = VerifierBuilderFactory.newVerifierBuilder();
+        Verifier verifier = vBuilder.newVerifier();
+        verifier.addResourcesToVerify(new ReaderResource(new StringReader(drl)), ResourceType.DRL);
+
+        for (int i = 0; i < verifier.getErrors().size(); i++)
+        {
+            errors.add(verifier.getErrors().get(i).getMessage());
+        }
+        return errors;
     }
 
 }

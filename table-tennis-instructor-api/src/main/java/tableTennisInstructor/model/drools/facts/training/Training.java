@@ -5,6 +5,7 @@ import tableTennisInstructor.model.drools.facts.skill.Skill;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "training")
@@ -19,17 +20,23 @@ public class Training {
 	@Column(name = "trainingLevel")
     public TrainingLevel trainingLevel;
 
+	@Column(name = "timeToExecute")
+	public Double timeToExecute;
+
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	@JoinColumn(name="skill_id")
 	public Skill skill;
 
-	@OneToMany()
-    public Collection<TrainingMistake> mostCommonMistakes;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "training_mistake_join",
+			joinColumns = @JoinColumn(name = "training_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "mistake_id", referencedColumnName = "id"))
+    public List<TrainingMistake> mostCommonMistakes;
 
-	@Column(name = "timeToExecute")
-    public Double timeToExecute;
-
-	@OneToMany()
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "training_drill_join",
+			joinColumns = @JoinColumn(name = "training_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "drill_id", referencedColumnName = "id"))
     public Collection<TrainingDrill> drills;
     
     public Training() {}
