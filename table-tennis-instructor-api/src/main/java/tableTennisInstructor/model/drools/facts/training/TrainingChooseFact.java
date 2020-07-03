@@ -59,6 +59,4 @@ public class TrainingChooseFact {
 		this.similarKnowledge = similarKnowledge;
 	}
 	
-
-	
 }

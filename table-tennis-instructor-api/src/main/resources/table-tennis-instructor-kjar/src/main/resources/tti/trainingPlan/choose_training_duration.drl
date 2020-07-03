@@ -4,9 +4,12 @@ package trainingPlan
 import tableTennisInstructor.model.drools.facts.*;
 import tableTennisInstructor.model.drools.facts.training.*;
 
+import static tableTennisInstructor.util.SalienceFunctions.*;
+
 rule "Set LONG training duration and create TrainingChooseFact"
-    when
-        $trReq: TrainingChooseRequestFact($userId: userId, trainingDuration >= 4)
+    salience($trReq.trainingDuration >= 4 ? 1: 0)
+	when
+        $trReq: TrainingChooseRequestFact($userId: userId)
         not TrainingChooseFact(userId == $userId)
     then
     	System.out.println("LONG trening");
@@ -17,8 +20,9 @@ rule "Set LONG training duration and create TrainingChooseFact"
 end
 
 rule "Set MEDIUM training duration and create TrainingChooseFact"
+	salience( ($trReq.trainingDuration < 4 && $trReq.trainingDuration >= 3)  ? 1: 0)
     when
-        $trReq: TrainingChooseRequestFact($userId: userId, trainingDuration >= 3, trainingDuration < 4 )
+        $trReq: TrainingChooseRequestFact($userId: userId)
         not TrainingChooseFact(userId == $userId)
     then
     	System.out.println("MEDIUM duration trening");
@@ -29,8 +33,9 @@ rule "Set MEDIUM training duration and create TrainingChooseFact"
 end
 
 rule "Set SHORT training duration and create TrainingChooseFact"
+	salience($trReq.trainingDuration < 3 ? 1: 0)
     when
-        $trReq: TrainingChooseRequestFact($userId: userId, trainingDuration < 3)
+        $trReq: TrainingChooseRequestFact($userId: userId)
         not TrainingChooseFact(userId == $userId)
     then
     	System.out.println("SHORT duration trening");
