@@ -1,44 +1,97 @@
-<mat-form-field>
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
-</mat-form-field>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<form [formGroup]="searchTrainingForm" (ngSubmit)="search(searchTrainingForm)">
+        
+        <div>
+            <mat-form-field>
+                <mat-label>Skill</mat-label>
+                <mat-select [formControl]="skillCntr">
+                    <mat-option *ngFor="let skill of allSkills" [value]="skill">
+                      {{skill.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="submitted && skillCntr.errors">
+                <div *ngIf="skillCntr.errors.required">Skill is required</div>
+            </div>
+        </div>
 
-         <!-- Id Column -->
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> Id </th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
+        <div>
+            <mat-form-field>
+                <mat-label>Training Mark</mat-label>
+                <mat-select [formControl]="trainingMarklCntr">
+                    <mat-option *ngFor="let trainingMark of trainingMarks" [value]="trainingMark">
+                      {{trainingMark}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted
+                        && trainingMarklCntr.errors && trainingMarklCntr.errors.required">
+                        Training Mark is required
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-        <ng-container matColumnDef="skill">
-          <th mat-header-cell *matHeaderCellDef> Skill </th>
-          <td mat-cell *matCellDef="let element"> {{element.skillName}} </td>
-        </ng-container>
-      
-        <!-- Position Column -->
-        <ng-container matColumnDef="skillLvl">
-            <th mat-header-cell *matHeaderCellDef> Skill Level </th>
-            <td mat-cell *matCellDef="let element"> {{element.skillLvl}} </td>
-        </ng-container>
+        <div>
+            <mat-form-field>
+                <mat-label>From</mat-label>
+                <input [formControl]="fromTimeCntr" matInput placeholder="From last n months">
+            </mat-form-field>
+            <mat-error *ngIf="submitted
+                        && fromTimeCntr.errors && fromTimeCntr.errors.required">
+                        Number of months is required
+            </mat-error>
+        </div>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="trainingLvl">
-            <th mat-header-cell *matHeaderCellDef> Training Level </th>
-            <td mat-cell *matCellDef="let element"> {{element.trainingLvl}} </td>
-        </ng-container>
+        <button class="button" type="submit">Search</button>
+</form>
+<br>
+<br>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="trainingMark">
-            <th mat-header-cell *matHeaderCellDef> Training Mark </th>
-            <td mat-cell *matCellDef="let element"> {{element.trainingMark}} </td>
-        </ng-container>
 
-        <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef> Training Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.date | dateFormat}} </td>
-        </ng-container>
+<div *ngIf="dataSource && trainingHistory.length > 0">
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    
+             <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="skill">
+              <th mat-header-cell *matHeaderCellDef> Skill </th>
+              <td mat-cell *matCellDef="let element"> {{element.skillName}} </td>
+            </ng-container>
+          
+            <!-- Position Column -->
+            <ng-container matColumnDef="skillLvl">
+                <th mat-header-cell *matHeaderCellDef> Skill Level </th>
+                <td mat-cell *matCellDef="let element"> {{element.skillLvl}} </td>
+            </ng-container>
+    
+            <!-- Position Column -->
+            <ng-container matColumnDef="trainingLvl">
+                <th mat-header-cell *matHeaderCellDef> Training Level </th>
+                <td mat-cell *matCellDef="let element"> {{element.trainingLvl}} </td>
+            </ng-container>
+    
+            <!-- Position Column -->
+            <ng-container matColumnDef="trainingMark">
+                <th mat-header-cell *matHeaderCellDef> Training Mark </th>
+                <td mat-cell *matCellDef="let element"> {{element.trainingMark}} </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Training Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.date | dateFormat}} </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>    
+</div>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-
+<div *ngIf="trainingHistory && trainingHistory.length < 1">
+    No search results
+</div>

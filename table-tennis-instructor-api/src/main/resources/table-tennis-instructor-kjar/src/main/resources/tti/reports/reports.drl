@@ -8,26 +8,66 @@ import tableTennisInstructor.model.drools.facts.skill.*;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
-// pazi na beskonacnu petlju
+import java.util.Date;
 
-query findTrainingExecutions(long $userId, int $forMonths,
-                             long $skillId, TrainingMark $desiredTrainingMark)
 
-//    $tr: TrainingExecution($userIdd : getUser().id) from trainingExecutions
-      $tr: TrainingExecution($userId := getUser().id) from trainingExecutions
+rule "find trainig executions when trainigMark and skillId not specified"
+
+    when
+        $trpf: TrainingReportFact(skillId == -1, trainingMark == TrainingMark.UNKNOWN, processed == false)
+        $trExec : ArrayList() from collect(
+                                    TrainingExecution(this.getUser().getId() == $trpf.userId,
+                                                       date >= $trpf.beforeDate
+                                                                 ) from trainingExecutions
+                                    )
+    then
+        System.out.println("specificiran samo broj meseci");
+        modify($trpf){setTrExecutionsIdMeetCondition($trExec)}
+        modify($trpf){setProcessed(true)}
 end
 
-//rule "Return all if training executions for user if training mark UNKNOWN and skillId is null and forMonths is greater then 2400"
-//
-//	when
-//	    $trReportFact: TrainingReportFact(skillId == -1,
-//	                                      trainingMark == TrainingMark.UNKNOWN,
-//	                                      forMonths >= 2400, processed != true)
-//
-//	     $trExecutions : findTrainingExecutions($trReportFact.userId, $trReportFact.forMonths, Variable.v, dtm;)
-//
-//
-//	then
-//	    modify($trReportFact){setTrExecutionsIdMeetCondition($trExecutions)}
-//	    modify($trReportFact){setProcessed(true)}
-//end
+rule "find training executions when trainig mark specified but skillId not"
+    when
+        $trpf: TrainingReportFact(skillId == -1, trainingMark != TrainingMark.UNKNOWN, processed == false)
+
+        $trExec : ArrayList() from collect(
+                                    TrainingExecution($trpf.userId == getUser().id, date >= $trpf.beforeDate,
+                                                      trainingMark == $trpf.trainingMark
+                                                                 ) from trainingExecutions
+                                    )
+    then
+        System.out.println("ovo je kad samo skill nije specificiran");
+        modify($trpf){setTrExecutionsIdMeetCondition($trExec)}
+        modify($trpf){setProcessed(true)}
+end
+
+rule "find training executions when trainig mark is not specified but skillId is"
+    when
+        $trpf: TrainingReportFact(skillId != -1, trainingMark == TrainingMark.UNKNOWN, processed == false)
+
+        $trExec : ArrayList() from collect(
+                                    TrainingExecution($trpf.userId == getUser().id, date >= $trpf.beforeDate,
+                                                       $trpf.skillId == getTraining().getSkill().skillId
+                                                     ) from trainingExecutions
+                                    )
+    then
+        System.out.println("ovo je kad samo skillId specificiran, pored njega i vreme i id usera..");
+        modify($trpf){setTrExecutionsIdMeetCondition($trExec)}
+        modify($trpf){setProcessed(true)}
+end
+
+rule "find training executions when trainig mark is specified and skillId"
+    when
+        $trpf: TrainingReportFact(skillId != -1, trainingMark != TrainingMark.UNKNOWN, processed == false)
+
+        $trExec : ArrayList() from collect(
+                                    TrainingExecution($trpf.userId == getUser().id, date >= $trpf.beforeDate,
+                                                      $trpf.skillId == getTraining().getSkill().skillId,
+                                                      $trpf.trainingMark == trainingMark
+                                                     ) from trainingExecutions
+                                    )
+    then
+        System.out.println("ovo je kad su i skillId specificiran i ocena treninga, pored njih i vreme i id usera..");
+        modify($trpf){setTrExecutionsIdMeetCondition($trExec)}
+        modify($trpf){setProcessed(true)}
+end

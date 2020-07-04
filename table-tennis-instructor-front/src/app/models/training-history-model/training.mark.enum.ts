@@ -1,6 +1,6 @@
 export enum TrainingMarkType {
     UNKNOWN = 'UNKNOWN',
-    BEGINER = 'BEGINER',
-    INTERMEDIATE = 'INTERMEDIATE',
-    ADVANCED = 'ADVANCED'
+    GOOD = 'GOOD',
+    BAD = 'BAD',
+    EXCELLENT = 'EXCELLENT'
 }

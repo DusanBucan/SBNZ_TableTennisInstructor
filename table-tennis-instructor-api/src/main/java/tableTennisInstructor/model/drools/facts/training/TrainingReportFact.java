@@ -4,13 +4,15 @@ import org.kie.api.definition.type.PropertyReactive;
 import tableTennisInstructor.dto.request.TrainingHistorySearchDTO;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TrainingReportFact {
 
     public Long userId;
     public TrainingMark trainingMark;
     public Long skillId;
-    public int forMonths;
+    public Date beforeDate;
     public ArrayList<TrainingExecution> trExecutionsIdMeetCondition;
     public Boolean processed;
 
@@ -20,11 +22,11 @@ public class TrainingReportFact {
         this.processed = false;
     }
 
-    public TrainingReportFact(Long userId, TrainingMark trainingMark, Long skillId, int forMonths) {
+    public TrainingReportFact(Long userId, TrainingMark trainingMark, Long skillId, Date forMonths) {
         this.userId = userId;
         this.trainingMark = trainingMark;
         this.skillId = skillId;
-        this.forMonths = forMonths;
+        this.beforeDate = forMonths;
         this.processed = false;
     }
 
@@ -42,7 +44,9 @@ public class TrainingReportFact {
         if(forMonths < 1) {
                 forMonths = 2400; // ovo je poslednjih 20 godinas
         }
-        this.forMonths = forMonths;
+        Calendar c =Calendar.getInstance();
+        c.add(Calendar.MONTH, forMonths*-1);
+        this.beforeDate = c.getTime();
     }
 
     public void setSkillId(Long skillId) {
