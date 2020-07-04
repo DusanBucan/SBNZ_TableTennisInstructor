@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tableTennisInstructor.dto.request.TrainingHistorySearchDTO;
 import tableTennisInstructor.dto.response.TrainingExecutionDTO;
-import tableTennisInstructor.service.TrainingExecutionService;
+import tableTennisInstructor.service.TrainingExecutionReportsService;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 public class TrainingExecutionReportsController {
 
     @Autowired
-    private TrainingExecutionService trainingExecutionService;
+    private TrainingExecutionReportsService trainingExecutionReportsService;
 
     @PostMapping(path = "getTrainingHistory")
-    public ResponseEntity<ArrayList<TrainingExecutionDTO>> getTrainingHistory(
-            @RequestBody TrainingHistorySearchDTO searchParam) {
+    public ResponseEntity<ArrayList<TrainingExecutionDTO>> getTrainingHistory (
+            @RequestBody TrainingHistorySearchDTO searchParam) throws Exception{
         ArrayList<TrainingExecutionDTO> trainingExecutions = (ArrayList<TrainingExecutionDTO>)
-                trainingExecutionService.reports(searchParam)
+                trainingExecutionReportsService.makeReport(searchParam)
                         .stream().map(tre -> new TrainingExecutionDTO(tre)).collect(Collectors.toList());
         return new ResponseEntity<>(trainingExecutions, HttpStatus.OK);
     }

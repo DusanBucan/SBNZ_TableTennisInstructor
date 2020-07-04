@@ -5,7 +5,7 @@ import tableTennisInstructor.model.drools.facts.training.TrainingExecution;
 
 import java.util.ArrayList;
 
-public interface TrainingExecutionReports {
+public interface TrainingExecutionReportsService {
 
     ArrayList<TrainingExecution> makeReport(TrainingHistorySearchDTO searchDTO) throws Exception;
 

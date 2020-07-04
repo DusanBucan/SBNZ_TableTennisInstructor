@@ -1,0 +1,33 @@
+package reports
+
+global ArrayList<TrainingExecution> trainingExecutions;
+//list any import classes here.
+import tableTennisInstructor.model.drools.facts.*;
+import tableTennisInstructor.model.drools.facts.training.*;
+import tableTennisInstructor.model.drools.facts.skill.*;
+import java.util.ArrayList;
+import java.time.LocalDate;
+
+// pazi na beskonacnu petlju
+
+query findTrainingExecutions(long $userId, int $forMonths,
+                             long $skillId, TrainingMark $desiredTrainingMark)
+
+//    $tr: TrainingExecution($userIdd : getUser().id) from trainingExecutions
+      $tr: TrainingExecution($userId := getUser().id) from trainingExecutions
+end
+
+//rule "Return all if training executions for user if training mark UNKNOWN and skillId is null and forMonths is greater then 2400"
+//
+//	when
+//	    $trReportFact: TrainingReportFact(skillId == -1,
+//	                                      trainingMark == TrainingMark.UNKNOWN,
+//	                                      forMonths >= 2400, processed != true)
+//
+//	     $trExecutions : findTrainingExecutions($trReportFact.userId, $trReportFact.forMonths, Variable.v, dtm;)
+//
+//
+//	then
+//	    modify($trReportFact){setTrExecutionsIdMeetCondition($trExecutions)}
+//	    modify($trReportFact){setProcessed(true)}
+//end
