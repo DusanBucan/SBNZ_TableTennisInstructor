@@ -44,8 +44,8 @@ rule "Choose beginer trainig level"
         						 choosenLevel != TrainingLevel.BEGINNER,
         						 	(
         						 		userHealthState == UserHealthState.BAD || 
-        						 		previousKnowledge == Knowledge.BEGINER ||
-        						 		similarKnowledge == Knowledge.BEGINER
+        						 		previousKnowledge == Knowledge.BEGINNER ||
+        						 		similarKnowledge == Knowledge.BEGINNER
         						 	)		
         						 )@Watch (!userId);
     then

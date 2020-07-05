@@ -23,7 +23,7 @@ rule "Choose BEGINER similiar skill knowledge if does not know any similar skill
     	 					)
 	then
 		System.out.println("Slicno znanje je POCETNICKO jer nema nista u listi");
-    	$tfc.setSimilarKnowledge(Knowledge.BEGINER);
+    	$tfc.setSimilarKnowledge(Knowledge.BEGINNER);
     	update($tfc);
 end
 
@@ -38,7 +38,7 @@ rule "Choose BEGINER similiar skill knowledge if knows only one similar skill at
     	Number(intValue == 1) from accumulate (
     	 						TrainingExecution(
     	 							$similarSkills.similarSkills contains training.skill.skillId,
-    	 							training.skill.skillLevel == SkillLevel.BEGINER
+    	 							training.skill.skillLevel == SkillLevel.BEGINNER
     	 						)	 
     	 						from $trainHistory,
     	 						init(int count = 0;),
@@ -48,7 +48,7 @@ rule "Choose BEGINER similiar skill knowledge if knows only one similar skill at
     	 					)
 	then
 		System.out.println("Slicno znanje je POCETNICKO jer zna samo jednu slicnu pocetnickog lvl");
-    	$tfc.setSimilarKnowledge(Knowledge.BEGINER);
+    	$tfc.setSimilarKnowledge(Knowledge.BEGINNER);
     	update($tfc);
 end
 
@@ -62,7 +62,7 @@ rule "Choose INTERMEDIATE similiar skill knowledge if knows more similar skill a
     	Number(intValue > 1) from accumulate (
     	 						TrainingExecution(
     	 							$similarSkills.similarSkills contains training.skill.skillId,
-    	 							training.skill.skillLevel == SkillLevel.BEGINER
+    	 							training.skill.skillLevel == SkillLevel.BEGINNER
     	 						)	 
     	 						from $trainHistory,
     	 						init(int count = 0;),

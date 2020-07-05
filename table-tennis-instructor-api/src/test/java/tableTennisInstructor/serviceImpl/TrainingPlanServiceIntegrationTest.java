@@ -97,8 +97,8 @@ public class TrainingPlanServiceIntegrationTest {
         assertNotNull(trainingChooseFact);
         assertTrue(trainingChooseFact.getUserHealthState().equals(UserHealthState.GOOD));
         assertTrue(trainingChooseFact.getTrainingDuradtion().equals(TrainingDuration.LONG));
-        assertTrue(trainingChooseFact.getPreviousKnowledge().equals(Knowledge.BEGINER));
-        assertTrue(trainingChooseFact.getSimilarKnowledge().equals(Knowledge.BEGINER));
+        assertTrue(trainingChooseFact.getPreviousKnowledge().equals(Knowledge.BEGINNER));
+        assertTrue(trainingChooseFact.getSimilarKnowledge().equals(Knowledge.BEGINNER));
         assertTrue(trainingChooseFact.getChoosenLevel().equals(TrainingLevel.BEGINNER));
 
 

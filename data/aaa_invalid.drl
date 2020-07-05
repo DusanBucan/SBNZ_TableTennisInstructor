@@ -1,0 +1,6 @@
+rule "Invalid Hello World"
+when
+	fadsfasdsadf
+then
+  System.out.println("invalid hello world")
+end

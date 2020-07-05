@@ -65,6 +65,7 @@ public class TrainingMonitorServiceImpl implements TrainingMonitorService {
                     SkillExecutionEvent executionEvent = shots.get(index);
                     executionEvent.setExecutionTime(new Date());
 //                    clock.advanceTime(1, TimeUnit.SECONDS);
+                    System.out.println("---------------------------------");
                     kieSession.insert(executionEvent);
                     try {
                         Thread.sleep(1000);

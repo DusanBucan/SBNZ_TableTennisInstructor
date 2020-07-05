@@ -1,0 +1,84 @@
+[
+    {
+        "id" : null,
+        "result" : false,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 4.0,
+        "deltaAngle" : 10.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : false,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 15.0,
+        "deltaAngle" : 15.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : false,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 16.0,
+        "deltaAngle" : 4.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : false,
+        "rightBodyMovement" : false,
+        "deltaSpeed" : 4.0,
+        "deltaAngle" : 15.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : false,
+        "rightBodyMovement" : false,
+        "deltaSpeed" : 4.0,
+        "deltaAngle" : 5.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : true,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 16.0,
+        "deltaAngle" : 16.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : false,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 4.0,
+        "deltaAngle" : 25.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : true,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 4.0,
+        "deltaAngle" : 5.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : true,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 4.0,
+        "deltaAngle" : 25.0,
+        "trainingExecutionId" : null 
+    },
+    {
+        "id" : null,
+        "result" : true,
+        "rightBodyMovement" : true,
+        "deltaSpeed" : 24.0,
+        "deltaAngle" : 5.0,
+        "trainingExecutionId" : null 
+    }
+
+
+]

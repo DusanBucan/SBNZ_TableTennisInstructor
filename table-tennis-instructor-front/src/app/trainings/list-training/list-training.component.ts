@@ -3,6 +3,7 @@ import { TrainingEntity } from 'src/app/models/training-model/training.model';
 import { TrainingService } from 'src/app/services/training-service/training.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-list-training',
@@ -15,14 +16,19 @@ export class ListTrainingComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'trainingLv', 'skillLvl', 'timeToExecute', 'actions'];
   dataSource;
 
+  userRole;
+
   constructor(
     private trainingService: TrainingService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {
     this.dataSource = null;
   }
 
   ngOnInit() {
+    this.userRole = this.auth.getUserRole();
+    console.log(this.userRole);
     this.fillTable();
   }
 

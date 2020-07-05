@@ -26,22 +26,22 @@ public class UtilImpl implements Util {
 
         Skill skill = new Skill();
         skill.setSkillId(1l);
-        skill.setSkillLevel(SkillLevel.BEGINER);
+        skill.setSkillLevel(SkillLevel.BEGINNER);
         skill.setSkillGroup(1);
 
         Skill skill1 = new Skill();
         skill1.setSkillId(2l);
-        skill1.setSkillLevel(SkillLevel.BEGINER);
+        skill1.setSkillLevel(SkillLevel.BEGINNER);
         skill1.setSkillGroup(1);
 
         Skill skill2 = new Skill();
         skill2.setSkillId(3l);
-        skill2.setSkillLevel(SkillLevel.BEGINER);
+        skill2.setSkillLevel(SkillLevel.BEGINNER);
         skill2.setSkillGroup(1);
 
         Skill skill4 = new Skill();
         skill4.setSkillId(4l);
-        skill4.setSkillLevel(SkillLevel.BEGINER);
+        skill4.setSkillLevel(SkillLevel.BEGINNER);
         skill4.setSkillGroup(1);
 
         Skill skill5 = new Skill();
@@ -139,7 +139,7 @@ public class UtilImpl implements Util {
 
         Skill skill2 = new Skill();
         skill2.setSkillId(2l);
-        skill2.setSkillLevel(SkillLevel.BEGINER);
+        skill2.setSkillLevel(SkillLevel.BEGINNER);
         skill2.setSkillGroup(1);
 
         Skill skill3 = new Skill();
@@ -149,7 +149,7 @@ public class UtilImpl implements Util {
 
         Skill skill4 = new Skill();
         skill4.setSkillId(4l);
-        skill4.setSkillLevel(SkillLevel.BEGINER);
+        skill4.setSkillLevel(SkillLevel.BEGINNER);
         skill4.setSkillGroup(1);
 
         Skill skill5 = new Skill();

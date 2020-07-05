@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SkillService } from 'src/app/services/skill-service/skill.service';
 import { SkillEntity } from 'src/app/models/skill-model/skill.model';
 import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-skill-list',
@@ -13,8 +14,10 @@ export class SkillListComponent implements OnInit {
   private skills: SkillEntity[];
   displayedColumns: string[] = ['id', 'skill', 'skillLvl', 'executionDescription', 'skillGroup', 'actions'];
   dataSource;
+  userRole;
 
-  constructor(private skillService: SkillService) {
+  constructor(private skillService: SkillService,
+              private auth: AuthService) {
      this.dataSource = null;
   }
 
@@ -37,6 +40,7 @@ export class SkillListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userRole = this.auth.getUserRole();
     this.fillTable();
   }
 

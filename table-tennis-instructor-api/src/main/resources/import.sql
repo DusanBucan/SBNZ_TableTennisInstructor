@@ -7,14 +7,14 @@ INSERT INTO `users` (id, email, enabled, first_name, last_name, last_password_re
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (1, 1);
 INSERT INTO `user_authority` (user_id, authority_id) VALUES (2, 2);
 
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (1, 'Forehand topspinn', 'aaaa', 'INTERMEDIATE', 1 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (2, 'Backhand topspinn', 'bbb', 'INTERMEDIATE', 1 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (3, 'Forehand flick', 'cc', 'ADVANCED', 3 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (4, 'Backhand flick', 'dd', 'ADVANCED', 3 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (5, 'Forehand push', 'aaaa', 'BEGINER', 2 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (6, 'Backhand push', 'aaaa', 'BEGINER', 2 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (7, 'Forehand drive', 'aaaa', 'BEGINER', 2 );
-INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (8, 'Backhand drive', 'aaaa', 'BEGINER', 2 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (1, 'Forehand topspinn', 'very powerfull', 'INTERMEDIATE', 1 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (2, 'Backhand topspinn', 'very powerfull', 'INTERMEDIATE', 1 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (3, 'Forehand flick', 'powerfull skill', 'ADVANCED', 3 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (4, 'Backhand flick', 'powerfull skill', 'ADVANCED', 3 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (5, 'Forehand push', 'good skill', 'BEGINNER', 2 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (6, 'Backhand push', 'good skill', 'BEGINNER', 2 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (7, 'Forehand drive', 'average skill', 'BEGINNER', 2 );
+INSERT INTO `skill` (skill_id, name, execution_description, skill_level, skill_group) VALUES (8, 'Backhand drive', 'average skill', 'BEGINNER', 2 );
 
 INSERT INTO `user_health` (id, user_id, date, heartbeat, systolic, diastolic, user_health_state) VALUES (1, 1, null , 65, 120, 75, 'UNKNOWN' );
 
@@ -150,5 +150,5 @@ INSERT INTO `training_drill_join` (training_id, drill_id)  VALUES (10,3)
 
 
 -- dosadasnji treninzi korisnika`
-INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (2, 1, 9, '2020-04-12', 'EXCELLENT');
-INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (1, 1, 2, '2020-04-12', 'EXCELLENT');
+INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (2, 1, 9, '2020-07-02', 'EXCELLENT');
+INSERT INTO `training_execution` (id , user_id, training_id, date, training_mark) VALUES (1, 1, 2, '2020-07-03', 'EXCELLENT');
